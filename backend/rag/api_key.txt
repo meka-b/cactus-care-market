@@ -1,0 +1,101 @@
+LLAMAPARSE API KEY:llx-cBgRdLytp8tR5ZA3dOMzEZXTToex4ugLBnbtJp17isIXkiMS
+
+from llama_cloud import AsyncLlamaCloud
+
+client = AsyncLlamaCloud(api_key="llx-cBgRdLytp8tR5ZA3dOMzEZXTToex4ugLBnbtJp17isIXkiMS")
+
+file_obj = await client.files.create(file="./my_document.pdf", purpose="parse")
+
+result = await client.parsing.parse(
+    file_id=file_obj.id,
+    tier="agentic",
+    expand=["markdown_full"],
+)
+
+print(result.markdown_full)
+
+
+Unstructured API Endpoint: https://platform.unstructuredapp.io/api/v1
+Legacy Partition Endpoint: https://api.unstructuredapp.io/general/v0/general
+Key Name: personal plant.kpk
+Key ID: vocooqhMu22rzZrAxsmD7UW2W6bXEY
+
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://documentation.datalab.to/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Health
+
+> This endpoint is used to check the health of the API.  Returns a JSON object with the key "status" set to "ok".
+
+
+
+## OpenAPI
+
+````yaml https://www.datalab.to/openapi.json get /api/v1/health
+openapi: 3.1.0
+info:
+  title: Datalab API
+  version: 0.0.1
+servers:
+  - url: https://www.datalab.to
+    description: Datalab API
+security: []
+paths:
+  /api/v1/health:
+    get:
+      summary: Health
+      description: >-
+        This endpoint is used to check the health of the API.  Returns a JSON
+        object with the key "status" set to "ok".
+      operationId: health_api_v1_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  schemas:
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: >-
+            The status of the service. Should be 'ok' if the service is running
+            correctly.
+      type: object
+      required:
+        - status
+      title: HealthResponse
+
+````
+
+import requests
+
+url = "https://www.datalab.to/api/v1/health"
+
+response = requests.get(url)
+
+print(response.text)
+
+from datalab_sdk import DatalabClient, ConvertOptions
+
+client = DatalabClient()
+
+# Basic conversion
+result = client.convert("document.pdf")
+print(result.markdown)
+
+# With options
+options = ConvertOptions(
+    output_format="markdown",
+    mode="balanced",
+    paginate=True
+)
+result = client.convert("document.pdf", options=options)
+
+"https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview" key: dyuwsg4sYOIR5tYffu16V12tyyKOn41FqNPx3wvpXek

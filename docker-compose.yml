@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: cactus_care_postgres
+    environment:
+      - POSTGRES_USER=yesil_admin
+      - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_DB=yesil_dukkan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cactus_care_backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://yesil_admin:supersecretpassword@postgres:5432/yesil_dukkan
+      - JWT_SECRET=supersecretkeyfortesting
+      - PUBLIC_URL=http://localhost
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend/media:/app/media
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BACKEND_URL=
+    container_name: cactus_care_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,56 @@
+fastapi==0.115.0
+uvicorn[standard]==0.31.0
+websockets==13.1
+python-multipart==0.0.12
+aiofiles==24.1.0
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# ── PDF extraction ────────────────────────────────────────────────────────
+pymupdf==1.24.11
+docling==2.13.0
+
+# MinerU (magic-pdf) — heavy, installs layout models on first run
+# Uncomment if you want local MinerU support:
+# magic-pdf[full]==0.11.1
+
+# Marker — local fallback only (Datalab API is used when key is present)
+# Uncomment for local Marker:
+# marker-pdf==1.3.1
+
+# Unstructured — local fallback (Platform API used when key is present)
+# unstructured[pdf]==0.16.1
+# Cloud SDK (for Platform API):
+# unstructured-client==0.26.0
+
+# ── LlamaCloud / LlamaParse ───────────────────────────────────────────────
+# New LlamaCloud SDK (agentic tier):
+llama-cloud
+# Legacy llama-parse SDK (fallback):
+llama-parse
+
+# ── OCR ───────────────────────────────────────────────────────────────────
+paddleocr==2.9.1
+paddlepaddle==2.6.2
+pytesseract==0.3.13
+Pillow==10.4.0
+
+# ── Embeddings + vector store ─────────────────────────────────────────────
+sentence-transformers==3.3.1
+chromadb==0.5.23
+
+# ── LangChain / LlamaIndex export schemas ────────────────────────────────
+langchain-core==0.3.20
+llama-index-core==0.12.3
+
+# ── Mistral API (vision captioning) ──────────────────────────────────────
+mistralai==1.2.5
+
+# ── HTTP ─────────────────────────────────────────────────────────────────
+httpx==0.27.2
+requests==2.32.3
+
+# ── Utilities ─────────────────────────────────────────────────────────────
+python-dotenv==1.0.1
+structlog==24.4.0
+tenacity

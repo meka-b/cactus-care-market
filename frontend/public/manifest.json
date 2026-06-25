@@ -1,0 +1,8 @@
+{
+  "short_name": "Yeşil Dükkan",
+  "name": "Yeşil Dükkan - Bitki Market",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#10b981",
+  "background_color": "#ffffff"
+}

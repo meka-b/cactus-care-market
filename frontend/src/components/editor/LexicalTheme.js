@@ -1,0 +1,36 @@
+export default {
+  ltr: 'ltr',
+  rtl: 'rtl',
+  paragraph: 'editor-p mb-4 leading-relaxed',
+  quote: 'editor-quote border-l-4 border-emerald-500 pl-4 py-1 italic text-slate-700 bg-emerald-50/50 rounded-r-lg my-4',
+  heading: {
+    h1: 'editor-h1 text-4xl font-bold mt-8 mb-4 font-heading',
+    h2: 'editor-h2 text-3xl font-bold mt-8 mb-4 font-heading',
+    h3: 'editor-h3 text-2xl font-bold mt-6 mb-3 font-heading',
+    h4: 'editor-h4 text-xl font-bold mt-6 mb-3 font-heading',
+  },
+  list: {
+    nested: {
+      listitem: 'editor-nested-listitem',
+    },
+    ol: 'editor-list-ol list-decimal pl-6 my-4 space-y-2',
+    ul: 'editor-list-ul list-disc pl-6 my-4 space-y-2',
+    listitem: 'editor-listitem',
+  },
+  image: 'editor-image rounded-xl max-w-full shadow-sm my-4',
+  link: 'editor-link text-emerald-600 underline decoration-emerald-600/30 underline-offset-4 hover:decoration-emerald-600 transition-colors',
+  text: {
+    bold: 'editor-text-bold font-bold',
+    italic: 'editor-text-italic italic',
+    overflowed: 'editor-text-overflowed',
+    hashtag: 'editor-text-hashtag text-blue-500',
+    underline: 'editor-text-underline underline',
+    strikethrough: 'editor-text-strikethrough line-through',
+    underlineStrikethrough: 'editor-text-underlineStrikethrough underline line-through',
+    code: 'editor-text-code bg-slate-100 rounded px-1.5 py-0.5 font-mono text-sm text-pink-600',
+  },
+  code: 'editor-code bg-slate-900 text-slate-50 p-4 rounded-xl font-mono text-sm overflow-x-auto my-4',
+  table: 'editor-table border-collapse w-full my-4',
+  tableCell: 'editor-tableCell border border-slate-300 p-2',
+  tableCellHeader: 'editor-tableCellHeader bg-slate-100 font-bold',
+};

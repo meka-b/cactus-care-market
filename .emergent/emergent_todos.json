@@ -1,0 +1,30 @@
+[
+  {
+    "content": "Backend: Campaign modelleri + service + endpoints + checkout",
+    "status": "completed"
+  },
+  {
+    "content": "Frontend: cart.jsx güncellemesi",
+    "status": "completed"
+  },
+  {
+    "content": "Frontend Storefront: BundleModule.jsx",
+    "status": "completed"
+  },
+  {
+    "content": "Frontend: ProductPage.jsx entegrasyonu",
+    "status": "completed"
+  },
+  {
+    "content": "Frontend: CartDrawer + CheckoutPage",
+    "status": "completed"
+  },
+  {
+    "content": "Frontend Admin: AdminCampaigns.jsx + route + nav",
+    "status": "completed"
+  },
+  {
+    "content": "Test: E2E bundle akışı (5 tip + kupon çakışma + mobile)",
+    "status": "completed"
+  }
+]
