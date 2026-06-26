@@ -4,6 +4,7 @@ from typing import Any, Dict
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from db_models import DBSettings
+from crypto_utils import encrypt_value, decrypt_value
 
 DEFAULT_LANDING_VISIBILITY = {
     # 9 categories visible by default
@@ -68,7 +69,12 @@ async def get_settings(db: AsyncSession) -> Dict[str, Any]:
     if not doc:
         return defaults
     # Merge DB overrides into defaults
-    return _merge_dicts(defaults, doc.value)
+    merged = _merge_dicts(defaults, doc.value)
+    if "api_keys" in merged:
+        for k, v in merged["api_keys"].items():
+            if isinstance(v, str) and v:
+                merged["api_keys"][k] = decrypt_value(v)
+    return merged
 
 
 async def _update_section(db: AsyncSession, section: str, updates: dict):
@@ -103,7 +109,8 @@ async def _update_section(db: AsyncSession, section: str, updates: dict):
 
 
 async def update_api_keys(db: AsyncSession, keys: dict):
-    await _update_section(db, "api_keys", keys)
+    encrypted_keys = {k: encrypt_value(v) if v else v for k, v in keys.items()}
+    await _update_section(db, "api_keys", encrypted_keys)
 
 
 async def update_menu(db: AsyncSession, menu: dict):
