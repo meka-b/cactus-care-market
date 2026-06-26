@@ -34,6 +34,7 @@ from db_models import (
     DBProduct, DBUser, DBOrder, DBOrderItem, DBWishlistItem, 
     DBReview, DBCoupon, DBBlogPost, DBCampaign, DBSettings, DBKnowledgeGraphJob, DBRagDocument, DBRagChunk
 )
+from crypto_utils import encrypt_value
 # Local imports (after env loaded)
 from models import (
     Product, ProductCreate, ProductUpdate, ProductImage,
@@ -1641,7 +1642,7 @@ async def admin_update_api_keys(data: APIKeysUpdate, user=Depends(require_admin)
     if "api_keys" not in val:
         val["api_keys"] = {}
     for k, v in update_data.items():
-        val["api_keys"][k] = v
+        val["api_keys"][k] = encrypt_value(v)
         
     await db.execute(update(DBSettings).where(DBSettings.key == "global").values(value=val))
     await db.commit()
