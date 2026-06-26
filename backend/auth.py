@@ -1,4 +1,5 @@
 """JWT auth utilities for Yeşil Dükkan."""
+
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -6,7 +7,7 @@ import bcrypt
 from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status, Header
 
-JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret")
+JWT_SECRET = os.environ["JWT_SECRET"]
 JWT_ALG = "HS256"
 JWT_EXPIRE_DAYS = 30
 
@@ -52,7 +53,9 @@ async def require_admin(user=Depends(get_current_user)) -> dict:
     return user
 
 
-async def optional_user(authorization: Optional[str] = Header(default=None)) -> Optional[dict]:
+async def optional_user(
+    authorization: Optional[str] = Header(default=None),
+) -> Optional[dict]:
     if not authorization or not authorization.startswith("Bearer "):
         return None
     try:
