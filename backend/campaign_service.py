@@ -11,8 +11,11 @@ Desteklenen tipler:
 - quantity_break:      Tek ürünün miktarına göre kademeli yüzde indirim.
 """
 from __future__ import annotations
+import logging
 from datetime import datetime, timezone
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 def _now_iso() -> str:
@@ -39,9 +42,9 @@ def is_campaign_live(camp: dict) -> bool:
                 d = d.replace(tzinfo=timezone.utc)
             if d < now:
                 return False
-    except Exception:
+    except Exception as e:
         # tarih parse edilemezse aktif kabul et
-        pass
+        logger.warning(f"Failed to parse campaign date, assuming active: {e}")
     return True
 
 
