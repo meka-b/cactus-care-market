@@ -1645,7 +1645,6 @@ async def admin_update_api_keys(data: APIKeysUpdate, user=Depends(require_admin)
         
     await db.execute(update(DBSettings).where(DBSettings.key == "global").values(value=val))
     await db.commit()
-    settings_service.clear_cache()
     return {"updated": True, "fields": list(update_data.keys())}
 
 
@@ -1670,7 +1669,6 @@ async def admin_update_menu(data: MenuUpdate, user=Depends(require_admin), db: A
         
     await db.execute(update(DBSettings).where(DBSettings.key == "global").values(value=val))
     await db.commit()
-    settings_service.clear_cache()
     return {"updated": True}
 
 
@@ -1695,7 +1693,6 @@ async def admin_update_general(data: GeneralUpdate, user=Depends(require_admin),
         
     await db.execute(update(DBSettings).where(DBSettings.key == "global").values(value=val))
     await db.commit()
-    settings_service.clear_cache()
     return {"updated": True}
 
 
@@ -1722,7 +1719,6 @@ async def admin_update_general(data: GeneralUpdate, user=Depends(require_admin),
     setting.value = val
     flag_modified(setting, "value")
     await db.commit()
-    settings_service.clear_cache()
     return {"updated": True}
 
 
@@ -1749,7 +1745,6 @@ async def admin_update_storefront_templates(data: StorefrontTemplateUpdate, user
         from sqlalchemy.orm.attributes import flag_modified
         flag_modified(setting, "value")
     await db.commit()
-    settings_service.clear_cache()
     return {"updated": True, "templates": setting.value}
 
 class HeroContentUpdate(BaseModel):

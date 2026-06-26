@@ -144,6 +144,3 @@ async def public_menu(db: AsyncSession) -> Dict[str, Any]:
 async def settings_to_admin_view(db: AsyncSession) -> Dict[str, Any]:
     return await get_settings(db)
 
-def clear_cache():
-    pass
-
