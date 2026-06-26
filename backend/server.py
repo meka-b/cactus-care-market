@@ -5,6 +5,7 @@ import json
 import re
 from pathlib import Path
 from datetime import datetime, timezone
+from dateutil import parser as dateparser
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, EmailStr
 
@@ -1079,7 +1080,6 @@ def _coupon_apply(coupon: dict, subtotal: float) -> dict:
         return {"valid": False, "reason": "Bu kupon kullanım limitine ulaştı"}
     if coupon.get("valid_until"):
         try:
-            from dateutil import parser as dateparser
             vu = dateparser.parse(coupon["valid_until"])
             if vu < datetime.now(timezone.utc).replace(tzinfo=vu.tzinfo if vu.tzinfo else timezone.utc):
                 return {"valid": False, "reason": "Kuponun süresi dolmuş"}
