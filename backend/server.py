@@ -3,6 +3,7 @@ import os
 import logging
 import json
 import re
+import copy
 from pathlib import Path
 from datetime import datetime, timezone
 from dateutil import parser as dateparser
@@ -1636,7 +1637,6 @@ async def admin_update_api_keys(data: APIKeysUpdate, user=Depends(require_admin)
         setting = DBSettings(key="global", value={})
         db.add(setting)
         
-    import copy
     val = copy.deepcopy(setting.value) if setting.value else {}
     if "api_keys" not in val:
         val["api_keys"] = {}
