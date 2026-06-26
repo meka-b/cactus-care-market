@@ -1083,8 +1083,8 @@ def _coupon_apply(coupon: dict, subtotal: float) -> dict:
             vu = dateparser.parse(coupon["valid_until"])
             if vu < datetime.now(timezone.utc).replace(tzinfo=vu.tzinfo if vu.tzinfo else timezone.utc):
                 return {"valid": False, "reason": "Kuponun süresi dolmuş"}
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Error parsing coupon valid_until date: {e}")
     if not coupon.get("is_active", True):
         return {"valid": False, "reason": "Bu kupon aktif değil"}
 
