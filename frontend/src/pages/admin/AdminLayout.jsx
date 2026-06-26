@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { Leaf, LayoutDashboard, Package, ShoppingCart, Wand2, LogOut, Home, Star, Ticket, BookOpen, Cog, Layers, Palette, Menu, X, Bell, Brain, Users, Settings, Gift, Network } from 'lucide-react';
+import { Leaf, LayoutDashboard, Package, ShoppingCart, Wand2, LogOut, Home, Star, Ticket, BookOpen, Cog, Layers, Palette, Menu, X, Bell, Brain, Users, Settings, Gift, Network, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -51,6 +51,8 @@ export default function AdminLayout() {
       <NavLink to="/admin/rag" className={linkCls}><Brain className="w-5 h-5" />Yapay Zeka (RAG)</NavLink>
       <NavLink to="/admin/tasarim" className={linkCls}><Palette className="w-5 h-5" />Tasarım Yönetimi</NavLink>
       <NavLink to="/admin/hero" className={linkCls}><Wand2 className="w-5 h-5" />Hero Yönetimi</NavLink>
+      <NavLink to="/admin/kategoriler" className={linkCls}><Layers className="w-5 h-5" />Kategoriler</NavLink>
+      <NavLink to="/admin/doktor" className={linkCls}><Activity className="w-5 h-5" />Sistem Doktoru</NavLink>
       <NavLink to="/admin/ayarlar" className={linkCls}><Cog className="w-5 h-5" />Ayarlar</NavLink>
     </>
   );

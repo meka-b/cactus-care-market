@@ -132,6 +132,7 @@ class DBBlogPost(Base):
     content: Mapped[dict] = mapped_column(JSON, default=dict)
     meta_title: Mapped[str] = mapped_column(String(255), default="")
     meta_description: Mapped[str] = mapped_column(Text, default="")
+    category: Mapped[str] = mapped_column(String(100), nullable=True)
     tags: Mapped[list] = mapped_column(JSON, default=list)
     author_name: Mapped[str] = mapped_column(String(255), default="Yeşil Dükkan")
     related_product_ids: Mapped[list] = mapped_column(JSON, default=list)
@@ -254,3 +255,12 @@ class DBKnowledgeGraphJob(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc)
 
+class DBSystemScan(Base):
+    __tablename__ = "system_scans"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    score: Mapped[int] = mapped_column(Integer, default=0)
+    passed: Mapped[int] = mapped_column(Integer, default=0)
+    warnings: Mapped[int] = mapped_column(Integer, default=0)
+    errors: Mapped[int] = mapped_column(Integer, default=0)
+    results: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc)

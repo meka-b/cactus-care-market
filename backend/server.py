@@ -47,10 +47,11 @@ from models import (
     Campaign, CampaignCreate, CampaignUpdate, BundleCalcRequest,
     UserProfileUpdate, UserPasswordUpdate
 )
-from constants import (
-    LANDING_PAGES, CATEGORIES, CARE_LEVELS, LIGHT_NEEDS, WATER_NEEDS, SIZES, POT_SIZES,
-    CATEGORY_SLUG, compute_tags_from_taxonomy
-)
+POT_SIZES = ["5.5 CM", "8.5 CM", "10.5 CM", "12 CM", "15 CM", "17 CM", "21 CM"]
+
+import settings_service
+
+from taxonomy_helpers import get_slug_from_taxonomy, compute_tags_from_taxonomy, get_taxonomy_names
 import settings_service
 from auth import (
     hash_password, verify_password, create_token, get_current_user, require_admin, optional_user
@@ -449,11 +450,37 @@ async def get_product_by_slug(slug: str, db: AsyncSession = Depends(get_db)):
 # ============================================================
 @api.get("/landing/{slug}")
 async def get_landing(slug: str, page: int = 1, limit: int = 24, sort: str = "newest", in_stock: Optional[bool] = None, db: AsyncSession = Depends(get_db)):
-    meta = LANDING_PAGES.get(slug)
+    taxonomy = await settings_service.get_taxonomy(db)
+    meta = None
+    mf = {}
+    
+    # Check products
+    for cat in taxonomy.get("product_categories", []):
+        if cat.get("slug") == slug:
+            meta = cat
+            mf = {"category": cat.get("name")}
+            break
+            
+    # Check filters
+    if not meta:
+        for fil in taxonomy.get("filters", []):
+            if fil.get("slug") == slug:
+                meta = fil
+                mf = {fil.get("type"): fil.get("name")}
+                if fil.get("type") == "pet_safe":
+                    mf = {"pet_safe": True}
+                break
+                
+    # Check collections
+    if not meta:
+        for col in taxonomy.get("collections", []):
+            if col.get("slug") == slug:
+                meta = col
+                break
+                
     if not meta:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     
-    mf = dict(meta["filter"])
     filters = _build_filter(
         category=mf.get("category"),
         care=mf.get("care_level"),
@@ -486,10 +513,10 @@ async def get_landing(slug: str, page: int = 1, limit: int = 24, sort: str = "ne
     
     return {
         "slug": slug,
-        "h1": meta["h1"],
-        "title": meta["title"],
-        "description": meta["desc"],
-        "filter": meta["filter"],
+        "h1": meta.get("seo_title") or meta.get("name") or "",
+        "title": meta.get("seo_title") or meta.get("name") or "",
+        "description": meta.get("seo_description") or "",
+        "filter": meta.get("name") or "",
         "items": items,
         "total": total,
         "page": page,
@@ -499,11 +526,25 @@ async def get_landing(slug: str, page: int = 1, limit: int = 24, sort: str = "ne
 
 
 @api.get("/landing")
-async def list_landing_slugs():
+async def list_landing_slugs(db: AsyncSession = Depends(get_db)):
     """Return all landing page slugs (for sitemap/nav)."""
+    taxonomy = await settings_service.get_taxonomy(db)
     out = []
-    for s, m in LANDING_PAGES.items():
-        out.append({"slug": s, "title": m["h1"], "filter": m["filter"]})
+    
+    for cat in taxonomy.get("product_categories", []):
+        if cat.get("status", "active") == "active":
+            out.append({"slug": cat.get("slug"), "title": cat.get("h1", cat.get("name")), "filter": {"category": cat.get("name")}})
+            
+    for fil in taxonomy.get("filters", []):
+        if fil.get("status", "active") == "active":
+            f_type = fil.get("type")
+            val = True if f_type == "pet_safe" else fil.get("name")
+            out.append({"slug": fil.get("slug"), "title": fil.get("h1", fil.get("name")), "filter": {f_type: val}})
+            
+    for col in taxonomy.get("collections", []):
+        if col.get("status", "active") == "active":
+            out.append({"slug": col.get("slug"), "title": col.get("h1", col.get("name")), "filter": {}})
+            
     return {"items": out}
 
 
@@ -511,18 +552,75 @@ async def list_landing_slugs():
 # TAXONOMY
 # ============================================================
 @api.get("/taxonomy")
-async def get_taxonomy():
+async def get_taxonomy_endpoint(db: AsyncSession = Depends(get_db)):
+    taxonomy = await settings_service.get_taxonomy(db)
     return {
-        "categories": CATEGORIES,
-        "care_levels": CARE_LEVELS,
-        "light_needs": LIGHT_NEEDS,
-        "water_needs": WATER_NEEDS,
-        "sizes": SIZES,
-        "pot_sizes": POT_SIZES,
+        "categories": get_taxonomy_names(taxonomy, "product_categories"),
+        "care_levels": get_taxonomy_names(taxonomy, "filters", "care_level"),
+        "light_needs": get_taxonomy_names(taxonomy, "filters", "light_need"),
+        "water_needs": get_taxonomy_names(taxonomy, "filters", "water_need"),
+        "sizes": get_taxonomy_names(taxonomy, "filters", "size"),
+        "pot_sizes": POT_SIZES
     }
 
+@api.get("/admin/categories/all")
+async def admin_get_all_categories(user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    return await settings_service.get_taxonomy(db)
 
-# ============================================================
+@api.post("/admin/categories/save")
+async def admin_save_categories(data: dict, user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    await settings_service.update_taxonomy(db, data)
+    settings_service.clear_cache()
+    return {"success": True}
+
+from pydantic import BaseModel
+class CategoryGenerateRequest(BaseModel):
+    name: str
+    type: str
+
+@api.post("/admin/categories/generate")
+async def admin_categories_generate(req: CategoryGenerateRequest, user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    import category_ai
+    from settings_service import get_api_key
+    mistral_key = await get_api_key(db, "mistral")
+    if not mistral_key:
+        mistral_key = os.environ.get("MISTRAL_API_KEY")
+    if not mistral_key:
+        raise HTTPException(status_code=400, detail="Mistral API anahtarı ayarlanmamış")
+    
+    try:
+        data = category_ai.generate_category_metadata_sync(req.name, req.type, mistral_key)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api.get("/admin/system-doctor/scan")
+async def admin_system_doctor_scan(user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    import system_doctor
+    scan_results = await system_doctor.run_full_scan(db)
+    
+    # Save to DB
+    from db_models import DBSystemScan
+    scan_entry = DBSystemScan(
+        score=scan_results["score"],
+        passed=scan_results["passed"],
+        warnings=scan_results["warnings"],
+        errors=scan_results["errors"],
+        results=scan_results["results"]
+    )
+    db.add(scan_entry)
+    await db.commit()
+    await db.refresh(scan_entry)
+    
+    return {"status": "success", "data": scan_entry}
+
+@api.get("/admin/system-doctor/history")
+async def admin_system_doctor_history(limit: int = 30, user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    from db_models import DBSystemScan
+    res = await db.execute(select(DBSystemScan).order_by(DBSystemScan.created_at.desc()).limit(limit))
+    history = res.scalars().all()
+    return {"status": "success", "data": history}
+
 # ADMIN - AI Analyze (PlantNet + Mistral)
 # ============================================================
 @api.post("/admin/ai/analyze")
@@ -605,20 +703,27 @@ async def admin_blog_seo(req: BlogSEORequest, user=Depends(require_admin), db: A
 # ============================================================
 @api.post("/admin/products")
 async def admin_create_product(data: ProductCreate, background_tasks: BackgroundTasks, user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
+    taxonomy = await settings_service.get_taxonomy(db)
     # Recompute tags
     tags = compute_tags_from_taxonomy(
-        data.category, data.care_level, data.light_need, data.water_need, data.size, data.pet_safe
+        taxonomy, data.category, data.care_level, data.light_need, data.water_need, data.size, data.pet_safe
     )
     # Validate enums
-    if data.category not in CATEGORIES:
+    cats = get_taxonomy_names(taxonomy, "product_categories")
+    cares = get_taxonomy_names(taxonomy, "filters", "care_level")
+    lights = get_taxonomy_names(taxonomy, "filters", "light_need")
+    waters = get_taxonomy_names(taxonomy, "filters", "water_need")
+    sizes = get_taxonomy_names(taxonomy, "filters", "size")
+    
+    if data.category and data.category not in cats:
         raise HTTPException(status_code=400, detail=f"Geçersiz kategori: {data.category}")
-    if data.care_level not in CARE_LEVELS:
+    if data.care_level and data.care_level not in cares:
         raise HTTPException(status_code=400, detail="Geçersiz bakım seviyesi")
-    if data.light_need not in LIGHT_NEEDS:
+    if data.light_need and data.light_need not in lights:
         raise HTTPException(status_code=400, detail="Geçersiz ışık ihtiyacı")
-    if data.water_need not in WATER_NEEDS:
+    if data.water_need and data.water_need not in waters:
         raise HTTPException(status_code=400, detail="Geçersiz sulama")
-    if data.size not in SIZES:
+    if data.size and data.size not in sizes:
         raise HTTPException(status_code=400, detail="Geçersiz boyut")
     if data.pot_size and data.pot_size not in POT_SIZES:
         raise HTTPException(status_code=400, detail="Geçersiz saksı çapı")
@@ -702,7 +807,9 @@ async def admin_update_product(product_id: str, data: ProductUpdate, user=Depend
     for key, value in update_data.items():
         setattr(cur, key, value)
         
+    taxonomy = await settings_service.get_taxonomy(db)
     cur.tags = compute_tags_from_taxonomy(
+        taxonomy,
         cur.category or "", cur.care_level or "", cur.light_need or "",
         cur.water_need or "", cur.size or "", bool(cur.pet_safe)
     )
@@ -2022,6 +2129,32 @@ async def startup_seed():
             
         await session.commit()
     # Note: indexes are managed by SQLAlchemy migrations or metadata.create_all()
+
+    # Start daily system doctor scan loop
+    import asyncio
+    async def daily_system_scan():
+        while True:
+            # Wait 24 hours
+            await asyncio.sleep(24 * 60 * 60)
+            try:
+                import system_doctor
+                from db_models import DBSystemScan
+                async with AsyncSessionLocal() as session:
+                    scan_results = await system_doctor.run_full_scan(session)
+                    scan_entry = DBSystemScan(
+                        score=scan_results["score"],
+                        passed=scan_results["passed"],
+                        warnings=scan_results["warnings"],
+                        errors=scan_results["errors"],
+                        results=scan_results["results"]
+                    )
+                    session.add(scan_entry)
+                    await session.commit()
+                    logger.info(f"Daily system scan completed with score {scan_results['score']}")
+            except Exception as e:
+                logger.error(f"Daily system scan failed: {e}")
+
+    asyncio.create_task(daily_system_scan())
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

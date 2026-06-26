@@ -42,11 +42,13 @@ import AdminBlogList from '@/pages/admin/AdminBlogList';
 import AdminBlogEditor from '@/pages/admin/AdminBlogEditor';
 import AdminProductEdit from '@/pages/admin/AdminProductEdit';
 import AdminSettings from '@/pages/admin/AdminSettings';
+import AdminCategories from '@/pages/admin/AdminCategories';
 import { AdminDesigner } from '@/pages/admin/AdminDesigner';
 import AdminHeroBanner from '@/pages/admin/AdminHeroBanner';
 import AdminRAG from '@/pages/admin/AdminRAG';
 import AdminKnowledgeGraph from '@/pages/admin/AdminKnowledgeGraph';
 import AdminKGEditor from '@/pages/admin/AdminKGEditor';
+import AdminSystemDoctor from '@/pages/admin/AdminSystemDoctor';
 import { TemplateProvider } from '@/contexts/TemplateContext';
 
 function GATracker() {
@@ -96,12 +98,14 @@ const SiteRoutes = () => (
       <Route path="blog" element={<AdminBlogList />} />
       <Route path="blog/yeni" element={<AdminBlogEditor />} />
       <Route path="blog/:id" element={<AdminBlogEditor />} />
+      <Route path="kategoriler" element={<AdminCategories />} />
       <Route path="ayarlar" element={<AdminSettings />} />
       <Route path="tasarim" element={<AdminDesigner />} />
       <Route path="hero" element={<AdminHeroBanner />} />
       <Route path="rag" element={<AdminRAG />} />
       <Route path="knowledge-graph" element={<AdminKnowledgeGraph />} />
       <Route path="knowledge-graph/editor" element={<AdminKGEditor />} />
+      <Route path="doktor" element={<AdminSystemDoctor />} />
     </Route>
 
     <Route path="*" element={<Navigate to="/" replace />} />

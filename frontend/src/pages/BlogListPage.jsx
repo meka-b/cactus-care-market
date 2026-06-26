@@ -55,6 +55,7 @@ export default function BlogListPage() {
   const [items, setItems] = useState([]);
   const [recent, setRecent] = useState([]);
   const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useSEO({
@@ -68,10 +69,12 @@ export default function BlogListPage() {
       api.get('/blog'),
       api.get('/blog-recent', { params: { limit: 5 } }),
       api.get('/blog-tags'),
-    ]).then(([r1, r2, r3]) => {
+      api.get('/taxonomy')
+    ]).then(([r1, r2, r3, r4]) => {
       setItems(r1.data.items);
       setRecent(r2.data.items);
       setTags(r3.data.items);
+      setCategories(r4.data.blog_categories || []);
     }).finally(() => setLoading(false));
   }, []);
 
@@ -89,6 +92,40 @@ export default function BlogListPage() {
         <h1 className="text-3xl sm:text-4xl font-semibold font-heading">Bitki Bakım Rehberi</h1>
         <p className="text-muted-foreground mt-2">Bitkilerinize en iyi bakımı sunmanız için uzman rehberleri.</p>
       </div>
+
+      {/* Blog Categories Carousel */}
+      {categories && categories.length > 0 && (
+        <div 
+          className="flex gap-3 overflow-x-auto no-scrollbar overflow-hidden cursor-grab active:cursor-grabbing pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6"
+          onMouseDown={(e) => {
+            const ele = e.currentTarget;
+            ele.isDown = true;
+            ele.startX = e.pageX - ele.offsetLeft;
+            ele.scrollLeftStart = ele.scrollLeft;
+          }}
+          onMouseLeave={(e) => { e.currentTarget.isDown = false; }}
+          onMouseUp={(e) => { e.currentTarget.isDown = false; }}
+          onMouseMove={(e) => {
+            const ele = e.currentTarget;
+            if (!ele.isDown) return;
+            e.preventDefault();
+            const x = e.pageX - ele.offsetLeft;
+            const walk = (x - ele.startX) * 2;
+            ele.scrollLeft = ele.scrollLeftStart - walk;
+          }}
+        >
+          {categories.map(c => (
+            <Link 
+              key={c.slug} 
+              to={`/blog?category=${c.slug}`}
+              className="flex-shrink-0 bg-white border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50 px-5 py-2.5 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-all shadow-sm"
+              draggable="false"
+            >
+              {c.name}
+            </Link>
+          ))}
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
         <div>

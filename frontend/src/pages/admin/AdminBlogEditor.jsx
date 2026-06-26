@@ -18,7 +18,7 @@ import ExaSidebar from '@/components/editor/plugins/ExaSidebar';
 import { $createParagraphNode, $createTextNode, $insertNodes, $getSelection, $getRoot } from 'lexical';
 import { $createLinkNode } from '@lexical/link';
 
-const EMPTY = { title: '', slug: '', excerpt: '', cover_image: '', meta_title: '', meta_description: '', tags: [], status: 'draft', author_name: 'Yeşil Dükkan', related_product_ids: [] };
+const EMPTY = { title: '', slug: '', excerpt: '', cover_image: '', meta_title: '', meta_description: '', category: '', tags: [], status: 'draft', author_name: 'Yeşil Dükkan', related_product_ids: [] };
 
 export default function AdminBlogEditor() {
   const { id } = useParams();
@@ -37,9 +37,12 @@ export default function AdminBlogEditor() {
   const [activeTab, setActiveTab] = useState(null); // 'settings', 'seo', 'products', 'ai'
   const editorRef = useRef(null);
 
+  const [blogCategories, setBlogCategories] = useState([]);
+
   useSEO({ title: (isNew ? 'Yeni Yazı' : 'Yazı Düzenle') + ' - Yönetim' });
 
   useEffect(() => {
+    api.get('/admin/categories/all').then(r => setBlogCategories(r.data?.blog_categories || [])).catch(() => {});
     if (isNew) return;
     api.get(`/admin/blog/${id}`).then(r => {
       const p = r.data;
@@ -50,6 +53,7 @@ export default function AdminBlogEditor() {
         cover_image: p.cover_image || '',
         meta_title: p.meta_title || '',
         meta_description: p.meta_description || '',
+        category: p.category || '',
         tags: p.tags || [],
         status: p.status || 'draft',
         author_name: p.author_name || 'Yeşil Dükkan',
@@ -253,6 +257,19 @@ export default function AdminBlogEditor() {
                         <SelectContent>
                           <SelectItem value="draft">Taslak</SelectItem>
                           <SelectItem value="published">Yayında</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Kategori</Label>
+                      <Select value={form.category} onValueChange={v => upd('category', v)}>
+                        <SelectTrigger className="w-full bg-slate-50">
+                          <SelectValue placeholder="Kategori Seçin" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {blogCategories.map(cat => (
+                            <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

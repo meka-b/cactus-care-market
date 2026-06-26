@@ -151,6 +151,7 @@ async def public_menu(db: AsyncSession) -> Dict[str, Any]:
 async def settings_to_admin_view(db: AsyncSession) -> Dict[str, Any]:
     return await get_settings(db)
 
+<<<<<<< Updated upstream
 _cached_settings = None
 _cache_time = 0
 
@@ -160,3 +161,26 @@ def clear_cache():
     _cached_settings = None
     _cache_time = 0
 
+=======
+async def get_taxonomy(db: AsyncSession) -> Dict[str, Any]:
+    result = await db.execute(select(DBSettings).where(DBSettings.key == "taxonomy"))
+    doc = result.scalars().first()
+    if not doc:
+        return {"product_categories": [], "blog_categories": [], "collections": [], "filters": []}
+    return doc.value
+
+async def update_taxonomy(db: AsyncSession, data: dict):
+    result = await db.execute(select(DBSettings).where(DBSettings.key == "taxonomy"))
+    doc = result.scalars().first()
+    if doc:
+        doc.value = data
+        from sqlalchemy.orm.attributes import flag_modified
+        flag_modified(doc, "value")
+    else:
+        doc = DBSettings(key="taxonomy", value=data)
+        db.add(doc)
+    await db.commit()
+
+def clear_cache():
+    pass
+>>>>>>> Stashed changes

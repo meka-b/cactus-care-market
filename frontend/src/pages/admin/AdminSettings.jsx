@@ -229,19 +229,7 @@ function MenuTab({ s, reload }) {
         </div>
       </Card>
 
-      <Card className="p-8 bg-white border-none shadow-sm rounded-2xl">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">SEO Katmanları & Kategoriler</h3>
-        <p className="text-sm text-gray-500 mb-6">Hangi kategori ve filtre sayfalarının sitemap (site haritası) üzerinde görünür olacağını yönetin.</p>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {Object.entries(landing).sort().map(([slug, vis]) => (
-            <label key={slug} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors">
-              <Checkbox checked={!!vis} onCheckedChange={v => setLanding({ ...landing, [slug]: !!v })} />
-              <span className="truncate text-sm font-medium text-gray-700">{slug}</span>
-            </label>
-          ))}
-        </div>
-      </Card>
+
 
       <div className="flex justify-end pt-2">
         <Button onClick={save} disabled={saving} className="bg-orange-600 text-white hover:bg-orange-700 rounded-xl px-6 py-5 shadow-md hover:shadow-lg transition-all">
@@ -250,6 +238,61 @@ function MenuTab({ s, reload }) {
         </Button>
       </div>
     </div>
+  );
+}
+
+function SystemDoctorTab() {
+  const [checks, setChecks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const runTest = async () => {
+    setLoading(true);
+    setChecks([]);
+    const id = toast.loading('Sistem kontrol ediliyor...');
+    try {
+      const res = await api.get('/admin/system/health');
+      setChecks(res.checks || []);
+      if (res.status === 'error') toast.error('Bazı kritik kontroller başarısız!', { id });
+      else if (res.status === 'warning') toast.warning('Sistemde uyarılar var!', { id });
+      else toast.success('Sistem mükemmel durumda!', { id });
+    } catch (e) {
+      toast.error('Kontrol edilemedi', { id });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Card className="p-8 bg-white border-none shadow-sm rounded-2xl space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-2">
+        <div className="flex items-center gap-2">
+          <Settings2 className="w-5 h-5 text-blue-600" />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800">Sistem Doktoru</h3>
+            <p className="text-sm text-gray-500 mt-1">Sistemin en kritik bileşenlerini tek tıklamayla kontrol edin.</p>
+          </div>
+        </div>
+        <Button onClick={runTest} disabled={loading} className="bg-blue-600 text-white hover:bg-blue-700 rounded-xl px-6 py-5 shadow-md hover:shadow-lg transition-all">
+          {loading ? 'Kontrol ediliyor...' : 'Sistemi Kontrol Et (Check)'}
+        </Button>
+      </div>
+
+      {checks.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          {checks.map((c, i) => (
+            <div key={i} className={`p-4 rounded-xl border ${c.status === 'error' ? 'bg-red-50 border-red-200' : c.status === 'warning' ? 'bg-orange-50 border-orange-200' : 'bg-emerald-50 border-emerald-200'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-gray-800">{c.name}</h4>
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${c.status === 'error' ? 'bg-red-100 text-red-700' : c.status === 'warning' ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                  {c.status.toUpperCase()}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600">{c.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
   );
 }
 
@@ -276,7 +319,7 @@ export default function AdminSettings() {
       </div>
       
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="bg-gray-100/80 p-1 rounded-xl mb-6 inline-flex border border-gray-200/50">
+        <TabsList className="bg-gray-100/80 p-1 rounded-xl mb-6 inline-flex border border-gray-200/50 flex-wrap gap-1">
           <TabsTrigger value="general" className="rounded-lg px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all">
             Genel Ayarlar
           </TabsTrigger>

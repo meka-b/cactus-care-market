@@ -6,7 +6,7 @@ import re
 import logging
 import requests
 from typing import Dict, Optional
-from constants import CATEGORIES, CARE_LEVELS, LIGHT_NEEDS, WATER_NEEDS, SIZES, compute_tags_from_taxonomy
+from taxonomy_helpers import compute_tags_from_taxonomy, get_taxonomy_names
 
 logger = logging.getLogger(__name__)
 
@@ -57,11 +57,18 @@ def identify_with_plantnet_sync(image_bytes: bytes, plantnet_key: str, filename:
     }
 
 
-def _build_prompt(plantnet: dict, product_name: str = "") -> str:
+def _build_prompt(plantnet: dict, product_name: str = "", taxonomy: dict = None) -> str:
     common = ", ".join(plantnet.get("common_names", [])[:3]) or "bilinmiyor"
     name_hint = ""
     if product_name:
         name_hint = f"\nADMIN VERILEN TR AD: \"{product_name}\" — common_name_tr bu olsun, slug bundan türetilsin."
+
+    categories = get_taxonomy_names(taxonomy, "product_categories") if taxonomy else []
+    care_levels = get_taxonomy_names(taxonomy, "filters", "care_level") if taxonomy else []
+    light_needs = get_taxonomy_names(taxonomy, "filters", "light_need") if taxonomy else []
+    water_needs = get_taxonomy_names(taxonomy, "filters", "water_need") if taxonomy else []
+    sizes = get_taxonomy_names(taxonomy, "filters", "size") if taxonomy else []
+
     return f"""Sen Yeşil Dükkan adlı Türkçe bir bitki e-ticaret platformu için ürün taksonomi üreten bir asistansın.
 
 Bu bitki için (PlantNet: scientific_name="{plantnet.get('scientific_name')}", family="{plantnet.get('family')}", common_names="{common}"), SADECE GEÇERLİ JSON döndür.
@@ -72,11 +79,11 @@ Bu bitki için (PlantNet: scientific_name="{plantnet.get('scientific_name')}", f
   "scientific_name":"string",
   "common_name_tr":"string",
   "slug":"string (ASCII, tire-li)",
-  "category":"string ({', '.join(CATEGORIES)})",
-  "care_level":"string ({' / '.join(CARE_LEVELS)})",
-  "light_need":"string ({' / '.join(LIGHT_NEEDS)})",
-  "water_need":"string ({' / '.join(WATER_NEEDS)})",
-  "size":"string ({' / '.join(SIZES)})",
+  "category":"string ({', '.join(categories)})",
+  "care_level":"string ({' / '.join(care_levels)})",
+  "light_need":"string ({' / '.join(light_needs)})",
+  "water_need":"string ({' / '.join(water_needs)})",
+  "size":"string ({' / '.join(sizes)})",
   "pet_safe":"boolean",
   "short_description":"string ≤160 char TR",
   "description":"string 200-400 kelime TR paragraflı",
@@ -89,7 +96,7 @@ Bu bitki için (PlantNet: scientific_name="{plantnet.get('scientific_name')}", f
 KURALLAR: SADECE JSON; enum'lar listeden; slug ASCII; kaktüsler dikenli=false; Aloe/Sukulent çoğunlukla true."""
 
 
-def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mistral_key: str, product_name: str = "") -> Dict:
+def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mistral_key: str, product_name: str = "", taxonomy: dict = None) -> Dict:
     if not mistral_key:
         raise ValueError("Mistral API anahtarı tanımlı değil")
     b64 = base64.b64encode(image_bytes).decode("utf-8")
@@ -100,7 +107,7 @@ def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mist
         "messages": [{
             "role": "user",
             "content": [
-                {"type": "text", "text": _build_prompt(plantnet, product_name)},
+                {"type": "text", "text": _build_prompt(plantnet, product_name, taxonomy)},
                 {"type": "image_url", "image_url": data_url},
             ],
         }],
@@ -115,6 +122,7 @@ def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mist
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     ai = json.loads(cleaned)
     ai["tags"] = compute_tags_from_taxonomy(
+        taxonomy,
         ai.get("category", ""), ai.get("care_level", ""), ai.get("light_need", ""),
         ai.get("water_need", ""), ai.get("size", ""), bool(ai.get("pet_safe", False))
     )
@@ -134,6 +142,14 @@ async def sync_plant_data(images_bytes: list[bytes], current_data: dict, db) -> 
         data_url = f"data:image/jpeg;base64,{b64}"
         messages_content.append({"type": "image_url", "image_url": data_url})
         
+    from settings_service import get_taxonomy
+    taxonomy = await get_taxonomy(db)
+    categories = get_taxonomy_names(taxonomy, "product_categories")
+    care_levels = get_taxonomy_names(taxonomy, "filters", "care_level")
+    light_needs = get_taxonomy_names(taxonomy, "filters", "light_need")
+    water_needs = get_taxonomy_names(taxonomy, "filters", "water_need")
+    sizes = get_taxonomy_names(taxonomy, "filters", "size")
+
     # 2) Build prompt with current data
     prompt = f"""Sen Yeşil Dükkan adlı Türkçe bir bitki e-ticaret platformu için ürün taksonomi üreten bir asistansın.
 Kullanıcı formu kısmen doldurmuş olabilir. Görevin, GÖRSELLERE ve mevcut verilere bakarak formu eksiksiz bir şekilde JSON olarak tamamlamaktır.
@@ -147,11 +163,11 @@ SADECE GEÇERLİ JSON DÖNDÜR.
   "scientific_name":"string",
   "common_name_tr":"string",
   "slug":"string (ASCII, tire-li)",
-  "category":"string ({', '.join(CATEGORIES)})",
-  "care_level":"string ({' / '.join(CARE_LEVELS)})",
-  "light_need":"string ({' / '.join(LIGHT_NEEDS)})",
-  "water_need":"string ({' / '.join(WATER_NEEDS)})",
-  "size":"string ({' / '.join(SIZES)})",
+  "category":"string ({', '.join(categories)})",
+  "care_level":"string ({' / '.join(care_levels)})",
+  "light_need":"string ({' / '.join(light_needs)})",
+  "water_need":"string ({' / '.join(water_needs)})",
+  "size":"string ({' / '.join(sizes)})",
   "pet_safe":"boolean",
   "short_description":"string ≤160 char TR",
   "description":"string 200-400 kelime TR paragraflı (zaten varsa koru)",
@@ -184,6 +200,7 @@ KURALLAR: SADECE JSON. Kategori ve bakım seviyeleri kesinlikle yukarıdaki list
     
     # Re-compute tags
     ai["tags"] = compute_tags_from_taxonomy(
+        taxonomy,
         ai.get("category", ""), ai.get("care_level", ""), ai.get("light_need", ""),
         ai.get("water_need", ""), ai.get("size", ""), bool(ai.get("pet_safe", False))
     )
@@ -193,12 +210,14 @@ KURALLAR: SADECE JSON. Kategori ve bakım seviyeleri kesinlikle yukarıdaki list
 
 async def analyze_plant_image(image_bytes: bytes, db, product_name: str = "") -> Dict:
     keys = await _keys(db)
+    from settings_service import get_taxonomy
+    taxonomy = await get_taxonomy(db)
     plant = identify_with_plantnet_sync(image_bytes, keys["plantnet"])
     if not plant.get("scientific_name"):
         if not product_name:
             raise ValueError("Bitki tanımlanamadı. Lütfen daha net bir bitki fotoğrafı yükleyin veya ürün adı belirtin.")
         plant = {"scientific_name": product_name, "common_names": [product_name], "family": "", "score": 0}
-    ai = generate_taxonomy_with_mistral_sync(image_bytes, plant, keys["mistral"], product_name)
+    ai = generate_taxonomy_with_mistral_sync(image_bytes, plant, keys["mistral"], product_name, taxonomy)
     ai["plantnet_score"] = plant.get("score", 0)
     ai["common_names"] = plant.get("common_names", [])
     return ai

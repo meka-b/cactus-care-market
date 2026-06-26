@@ -85,7 +85,7 @@ Kodlarınızı sunucuya çekmenin en profesyonel yolu Github kullanmaktır.
 2. Sunucuda projenin duracağı klasöre gidin ve kodları çekin:
 ```bash
 cd /opt
-git clone https://github.com/KULLANICI_ADINIZ/cactus-care-market-main.git
+git clone https://github.com/meka-b/cactus-care-market.git
 cd cactus-care-market-main
 ```
 *(Git clone işlemi sırasında size Github kullanıcı adınızı ve şifrenizi/tokenınızı soracaktır).*
