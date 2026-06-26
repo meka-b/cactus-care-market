@@ -303,26 +303,31 @@ async def manual_scan(background_tasks: BackgroundTasks, db: AsyncSession = Depe
     queued = 0
     from kg_agent import trigger_kg_blueprint_research
     
-    for p in products:
-        # Check if a pending, researching or idle job already exists
-        job_stmt = select(db_models.DBKnowledgeGraphJob).where(
-            db_models.DBKnowledgeGraphJob.product_id == p.id,
+    if products:
+        product_ids = [p.id for p in products]
+
+        # Batch fetch existing jobs for these products
+        job_stmt = select(db_models.DBKnowledgeGraphJob.product_id).where(
+            db_models.DBKnowledgeGraphJob.product_id.in_(product_ids),
             db_models.DBKnowledgeGraphJob.status.in_(["pending", "researching", "idle"])
         )
         job_res = await db.execute(job_stmt)
-        if job_res.scalars().first():
-            continue # already queued
-            
-        kg_job = db_models.DBKnowledgeGraphJob(
-            product_id=p.id,
-            scientific_name=p.scientific_name,
-            status="idle"
-        )
-        db.add(kg_job)
-        await db.commit()
-        await db.refresh(kg_job)
+        existing_job_product_ids = set(job_res.scalars().all())
         
-        queued += 1
+        for p in products:
+            if p.id in existing_job_product_ids:
+                continue # already queued
+
+            kg_job = db_models.DBKnowledgeGraphJob(
+                product_id=p.id,
+                scientific_name=p.scientific_name,
+                status="idle"
+            )
+            db.add(kg_job)
+            await db.commit()
+            await db.refresh(kg_job)
+
+            queued += 1
         
     return {"message": f"{queued} adet taranmamış ürün listeye eklendi.", "queued_count": queued}
 
