@@ -353,7 +353,7 @@ def _build_filter(category: Optional[str] = None, care: Optional[str] = None,
     if pot_size:
         f.append(DBProduct.pot_size == pot_size)
     if tag:
-        f.append(cast(DBProduct.tags, String).ilike(f'%"{tag}"%'))
+        f.append(cast(DBProduct.tags, String).icontains(f'"{tag}"', autoescape=True))
     if scientific_species:
         f.append(DBProduct.scientific_species == scientific_species)
     if featured is not None:
@@ -366,9 +366,9 @@ def _build_filter(category: Optional[str] = None, care: Optional[str] = None,
         f.append(DBProduct.price <= max_price)
     if search:
         f.append(or_(
-            DBProduct.common_name_tr.ilike(f"%{search}%"),
-            DBProduct.scientific_name.ilike(f"%{search}%"),
-            DBProduct.description.ilike(f"%{search}%")
+            DBProduct.common_name_tr.icontains(search, autoescape=True),
+            DBProduct.scientific_name.icontains(search, autoescape=True),
+            DBProduct.description.icontains(search, autoescape=True)
         ))
     return f
 
@@ -663,8 +663,8 @@ async def admin_list_products(user=Depends(require_admin), page: int = 1, limit:
     stmt = select(DBProduct)
     if search:
         stmt = stmt.where(or_(
-            DBProduct.common_name_tr.ilike(f"%{search}%"),
-            DBProduct.scientific_name.ilike(f"%{search}%")
+            DBProduct.common_name_tr.icontains(search, autoescape=True),
+            DBProduct.scientific_name.icontains(search, autoescape=True)
         ))
     stmt = stmt.order_by(desc(DBProduct.created_at)).offset((page-1)*limit).limit(limit)
     result = await db.execute(stmt)
@@ -673,8 +673,8 @@ async def admin_list_products(user=Depends(require_admin), page: int = 1, limit:
     count_stmt = select(func.count(DBProduct.id))
     if search:
         count_stmt = count_stmt.where(or_(
-            DBProduct.common_name_tr.ilike(f"%{search}%"),
-            DBProduct.scientific_name.ilike(f"%{search}%")
+            DBProduct.common_name_tr.icontains(search, autoescape=True),
+            DBProduct.scientific_name.icontains(search, autoescape=True)
         ))
     total = (await db.execute(count_stmt)).scalar() or 0
     return {"items": items, "total": total, "page": page, "limit": limit}
@@ -1389,11 +1389,11 @@ async def calculate_campaign(req: BundleCalcRequest, db: AsyncSession = Depends(
 async def list_blog(page: int = 1, limit: int = 12, tag: Optional[str] = None, search: Optional[str] = None, db: AsyncSession = Depends(get_db)):
     stmt = select(DBBlogPost).where(DBBlogPost.status == "published")
     if tag:
-        stmt = stmt.where(cast(DBBlogPost.tags, String).ilike(f'%"{tag}"%'))
+        stmt = stmt.where(cast(DBBlogPost.tags, String).icontains(f'"{tag}"', autoescape=True))
     if search:
         stmt = stmt.where(or_(
-            DBBlogPost.title.ilike(f"%{search}%"),
-            cast(DBBlogPost.content, String).ilike(f"%{search}%")
+            DBBlogPost.title.icontains(search, autoescape=True),
+            cast(DBBlogPost.content, String).icontains(search, autoescape=True)
         ))
     
     stmt = stmt.order_by(desc(DBBlogPost.published_at)).offset((page-1)*limit).limit(limit)
@@ -1408,7 +1408,7 @@ async def list_blog(page: int = 1, limit: int = 12, tag: Optional[str] = None, s
         
     count_stmt = select(func.count(DBBlogPost.id)).where(DBBlogPost.status == "published")
     if tag:
-        count_stmt = count_stmt.where(cast(DBBlogPost.tags, String).ilike(f'%"{tag}"%'))
+        count_stmt = count_stmt.where(cast(DBBlogPost.tags, String).icontains(f'"{tag}"', autoescape=True))
     total = (await db.execute(count_stmt)).scalar() or 0
     return {"items": items, "total": total, "page": page, "limit": limit, "pages": (total + limit - 1) // limit}
 
@@ -1479,9 +1479,9 @@ async def admin_product_search(q: str = "", limit: int = 20, user=Depends(requir
     )
     if q:
         stmt = stmt.where(or_(
-            DBProduct.common_name_tr.ilike(f"%{q}%"),
-            DBProduct.scientific_name.ilike(f"%{q}%"),
-            DBProduct.slug.ilike(f"%{q}%")
+            DBProduct.common_name_tr.icontains(q, autoescape=True),
+            DBProduct.scientific_name.icontains(q, autoescape=True),
+            DBProduct.slug.icontains(q, autoescape=True)
         ))
     stmt = stmt.limit(limit)
     result = await db.execute(stmt)
