@@ -1963,10 +1963,11 @@ app.include_router(knowledge_graph.router, prefix="/api")
 app.include_router(seo_engine.router)
 app.include_router(exa_router.router)
 
+cors_origins = os.environ.get("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_credentials="*" not in cors_origins,
+    allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
