@@ -1967,9 +1967,12 @@ async def get_thumb_image(filename: str):
 
 @api.get("/media/theme-component/{path:path}")
 async def get_theme_component_image(path: str):
-    p = MEDIA_ROOT / "theme-component" / path
-    if not p.exists():
+    base_dir = (MEDIA_ROOT / "theme-component").resolve()
+    p = (MEDIA_ROOT / "theme-component" / path).resolve()
+
+    if not p.is_relative_to(base_dir) or not p.exists():
         raise HTTPException(status_code=404)
+
     return FileResponse(p, media_type="image/png", headers={"Cache-Control": "public, max-age=31536000, immutable"})
 
 
