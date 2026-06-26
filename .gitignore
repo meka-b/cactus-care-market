@@ -99,3 +99,6 @@ backend/rag/storage/uploads/
 backend/media/
 poc/output/
 *.pdf
+# API Keys and Secrets
+api_key.txt
+*api_key*
