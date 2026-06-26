@@ -23,6 +23,7 @@ MISTRAL_API_KEY = "zmpWEhUVRNgqHmTyGEACuAWM9iJP3MFF"
 PLANTNET_URL = f"https://my-api.plantnet.org/v2/identify/all?api-key={PLANTNET_API_KEY}"
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 MISTRAL_MODEL = "pixtral-large-latest"
+DEBUG = os.environ.get("DEBUG", "0") == "1"
 
 SAMPLES_DIR = Path(__file__).parent / "samples"
 OUTPUT_DIR = Path(__file__).parent / "output"
@@ -258,9 +259,10 @@ def run_test(image_path: Path):
     if errs:
         for e in errs:
             log(f"  ✗ {e}", "ERROR")
-        # Save anyway for debug
-        with open(OUTPUT_DIR / f"{base_name}_failed.json", "w", encoding="utf-8") as f:
-            json.dump(ai, f, ensure_ascii=False, indent=2)
+        if DEBUG:
+            # Save anyway for debug
+            with open(OUTPUT_DIR / f"{base_name}_failed.json", "w", encoding="utf-8") as f:
+                json.dump(ai, f, ensure_ascii=False, indent=2)
         return False, ai
     log("  ✓ All fields valid")
 
