@@ -242,7 +242,7 @@ export default function ProductDetailPremium({ product, data, slug }) {
       </div>
 
       {/* Mobile Sticky Add to Cart (Appears when scrolling past original button) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <div className="lg:hidden fixed bottom-14 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-0.5">Toplam</div>

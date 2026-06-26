@@ -210,7 +210,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
         </section>
       )}
 
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[hsl(var(--border))] p-3 z-30">
+      <div className="md:hidden fixed bottom-14 left-0 right-0 bg-white border-t border-[hsl(var(--border))] p-3 z-30">
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <div className="text-xs text-muted-foreground">Toplam</div>

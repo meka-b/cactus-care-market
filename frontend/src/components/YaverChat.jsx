@@ -78,7 +78,7 @@ export function YaverChat() {
       {/* Floating button */}
       <button
         onClick={toggle}
-        className="fixed bottom-20 sm:bottom-4 right-4 z-[60] w-14 h-14 rounded-full bg-primary text-white grid place-items-center shadow-lg hover:bg-emerald-600 transition-colors"
+        className="fixed bottom-36 sm:bottom-4 right-4 z-[60] w-14 h-14 rounded-full bg-primary text-white grid place-items-center shadow-lg hover:bg-emerald-600 transition-colors"
         aria-label="Yaver Asistan"
         data-testid="yaver-toggle-button"
       >
