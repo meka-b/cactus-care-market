@@ -170,10 +170,13 @@ from fastapi import BackgroundTasks
 async def admin_rag_sync(user=Depends(require_admin), db: AsyncSession = Depends(get_db)):
     try:
         # 1. Delete existing auto-synced documents (products and blogs)
-        old_docs = await db.execute(select(DBRagDocument).where(DBRagDocument.source_type.in_(["product", "blog"])))
-        for d in old_docs.scalars().all():
-            await db.execute(delete(DBRagChunk).where(DBRagChunk.document_id == d.id))
-            await db.delete(d)
+        old_docs_result = await db.execute(select(DBRagDocument.id).where(DBRagDocument.source_type.in_(["product", "blog"])))
+        old_doc_ids = old_docs_result.scalars().all()
+
+        if old_doc_ids:
+            await db.execute(delete(DBRagChunk).where(DBRagChunk.document_id.in_(old_doc_ids)))
+            await db.execute(delete(DBRagDocument).where(DBRagDocument.id.in_(old_doc_ids)))
+
         await db.commit()
 
         # 2. Fetch all products
