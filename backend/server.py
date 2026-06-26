@@ -174,27 +174,42 @@ async def admin_rag_sync(user=Depends(require_admin), db: AsyncSession = Depends
             await db.delete(d)
         await db.commit()
 
+        import asyncio
+        from database import AsyncSessionLocal
+
+        sem = asyncio.Semaphore(5)
+
+        async def ingest_with_sem(title, source_type, content):
+            async with sem:
+                async with AsyncSessionLocal() as session:
+                    await rag_service.ingest_document(title, source_type, content, session)
+                    await session.commit()
+
         # 2. Fetch all products
         products = await db.execute(select(DBProduct))
-        product_count = 0
+        product_tasks = []
         for p in products.scalars().all():
             content = f"# Ürün: {p.common_name_tr}\n"
             content += f"Fiyat: {p.price} TL\nKategori: {p.category}\n"
             content += f"Bakım Zorluğu: {p.care_level}\nIşık İhtiyacı: {p.light_need}\nSu İhtiyacı: {p.water_need}\nEvcil Hayvan Dostu: {'Evet' if p.pet_safe else 'Hayır'}\n"
             content += f"Kısa Açıklama: {p.short_description or ''}\nDetaylı Açıklama: {p.description or ''}\n"
             
-            await rag_service.ingest_document(f"Ürün: {p.common_name_tr}", "product", content, db)
-            product_count += 1
+            product_tasks.append(ingest_with_sem(f"Ürün: {p.common_name_tr}", "product", content))
+
+        await asyncio.gather(*product_tasks)
+        product_count = len(product_tasks)
 
         # 3. Fetch all blogs
         blogs = await db.execute(select(DBBlogPost).where(DBBlogPost.status == 'published'))
-        blog_count = 0
+        blog_tasks = []
         for b in blogs.scalars().all():
             content = f"# Blog Makalesi: {b.title}\n"
             content += f"Özet: {b.excerpt or ''}\n\nİçerik:\n{b.content or ''}"
             
-            await rag_service.ingest_document(f"Makale: {b.title}", "blog", content, db)
-            blog_count += 1
+            blog_tasks.append(ingest_with_sem(f"Makale: {b.title}", "blog", content))
+
+        await asyncio.gather(*blog_tasks)
+        blog_count = len(blog_tasks)
             
         return {"message": f"{product_count} ürün ve {blog_count} makale başarıyla RAG sistemine senkronize edildi."}
     except Exception as e:
