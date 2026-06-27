@@ -111,7 +111,7 @@ export default function AdminHeroBanner() {
   };
 
   const renderImageBlock = (label, prefix, recommendedSize) => (
-    <div className="p-4 border border-slate-100 rounded-lg bg-slate-50/50">
+    <div className="p-4 border border-slate-100 rounded-xl bg-slate-50/50">
       <div className="flex flex-wrap items-center justify-between mb-3 gap-2">
         <h4 className="font-medium text-slate-800">{label}</h4>
         {recommendedSize && (
@@ -446,7 +446,7 @@ export default function AdminHeroBanner() {
                           <div className="col-span-full py-10 text-center text-slate-500">Ürün bulunamadı.</div>
                         ) : (
                           products.map(p => (
-                            <div key={p.id} className="border border-slate-200 rounded-lg p-3 hover:border-emerald-500 cursor-pointer transition-colors" onClick={() => {
+                            <div key={p.id} className="border border-slate-200 rounded-xl p-3 hover:border-emerald-500 cursor-pointer transition-colors" onClick={() => {
                               const currentItems = variantFields.marqueeItems || [];
                               const newItems = [];
                               
@@ -462,7 +462,7 @@ export default function AdminHeroBanner() {
                               handleVariantChange('marqueeItems', [...currentItems, ...newItems]);
                               toast.success(`${p.common_name_tr} (${newItems.length} görsel) eklendi`);
                             }}>
-                              <div className="aspect-square w-full rounded-md bg-slate-100 overflow-hidden mb-2">
+                              <div className="aspect-square w-full rounded-xl bg-slate-100 overflow-hidden mb-2">
                                 {p.images?.[0]?.thumb ? <img src={resolveImageUrl(p.images[0].thumb)} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-8 h-8 text-slate-300 m-auto mt-8" />}
                               </div>
                               <div className="text-xs font-medium text-slate-800 line-clamp-2">{p.common_name_tr}</div>

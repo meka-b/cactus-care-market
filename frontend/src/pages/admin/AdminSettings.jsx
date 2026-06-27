@@ -44,7 +44,7 @@ function GeneralTab({ s, reload }) {
   };
 
   return (
-    <Card className="p-8 bg-white border-none shadow-sm rounded-2xl space-y-6">
+    <Card className="p-8 bg-white border-none shadow-sm rounded-xl space-y-6">
       <div className="flex items-center gap-2 mb-2">
         <Settings2 className="w-5 h-5 text-emerald-600" />
         <h3 className="text-lg font-semibold text-gray-800">Mağaza Genel Ayarları</h3>
@@ -103,7 +103,7 @@ function APIKeysTab({ s, reload }) {
   };
 
   return (
-    <Card className="p-8 bg-white border-none shadow-sm rounded-2xl space-y-6">
+    <Card className="p-8 bg-white border-none shadow-sm rounded-xl space-y-6">
       <div className="flex flex-col gap-2 mb-6">
         <div className="flex items-center gap-2">
           <KeyRound className="w-5 h-5 text-indigo-500" />
@@ -190,7 +190,7 @@ function MenuTab({ s, reload }) {
 
   return (
     <div className="space-y-6">
-      <Card className="p-8 bg-white border-none shadow-sm rounded-2xl">
+      <Card className="p-8 bg-white border-none shadow-sm rounded-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2">
@@ -208,19 +208,19 @@ function MenuTab({ s, reload }) {
           {links.map((l, i) => (
             <div key={i} className="flex flex-wrap md:flex-nowrap gap-3 items-center p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-sm transition-all">
               <div className="flex-1 min-w-[150px]">
-                <Input className="rounded-lg border-gray-200 focus:ring-orange-500" value={l.label} onChange={e => updLink(i, 'label', e.target.value)} placeholder="Bağlantı Adı" />
+                <Input className="rounded-xl border-gray-200 focus:ring-orange-500" value={l.label} onChange={e => updLink(i, 'label', e.target.value)} placeholder="Bağlantı Adı" />
               </div>
               <div className="flex-1 min-w-[150px]">
-                <Input className="rounded-lg border-gray-200 focus:ring-orange-500" value={l.url} onChange={e => updLink(i, 'url', e.target.value)} placeholder="/url-adresi" />
+                <Input className="rounded-xl border-gray-200 focus:ring-orange-500" value={l.url} onChange={e => updLink(i, 'url', e.target.value)} placeholder="/url-adresi" />
               </div>
               <div className="w-[80px]">
-                <Input className="rounded-lg border-gray-200 focus:ring-orange-500 text-center" type="number" value={l.order} onChange={e => updLink(i, 'order', parseInt(e.target.value) || 0)} placeholder="Sıra" title="Sıralama (Küçükten büyüğe)" />
+                <Input className="rounded-xl border-gray-200 focus:ring-orange-500 text-center" type="number" value={l.order} onChange={e => updLink(i, 'order', parseInt(e.target.value) || 0)} placeholder="Sıra" title="Sıralama (Küçükten büyüğe)" />
               </div>
               <label className="flex items-center gap-2 text-sm w-[90px] cursor-pointer">
                 <Checkbox checked={l.visible} onCheckedChange={v => updLink(i, 'visible', !!v)} />
                 <span className="select-none text-gray-700">Aktif</span>
               </label>
-              <Button size="icon" variant="ghost" className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg" onClick={() => delLink(i)}>
+              <Button size="icon" variant="ghost" className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl" onClick={() => delLink(i)}>
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
@@ -263,7 +263,7 @@ function SystemDoctorTab() {
   };
 
   return (
-    <Card className="p-8 bg-white border-none shadow-sm rounded-2xl space-y-6">
+    <Card className="p-8 bg-white border-none shadow-sm rounded-xl space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-2">
         <div className="flex items-center gap-2">
           <Settings2 className="w-5 h-5 text-blue-600" />
@@ -307,7 +307,7 @@ export default function AdminSettings() {
   if (loading || !s) return (
     <div className="max-w-4xl space-y-4 animate-pulse">
       <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
-      <div className="h-[400px] bg-gray-100 rounded-2xl"></div>
+      <div className="h-[400px] bg-gray-100 rounded-xl"></div>
     </div>
   );
 
@@ -320,13 +320,13 @@ export default function AdminSettings() {
       
       <Tabs defaultValue="general" className="w-full">
         <TabsList className="bg-gray-100/80 p-1 rounded-xl mb-6 inline-flex border border-gray-200/50 flex-wrap gap-1">
-          <TabsTrigger value="general" className="rounded-lg px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all">
+          <TabsTrigger value="general" className="rounded-xl px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm transition-all">
             Genel Ayarlar
           </TabsTrigger>
-          <TabsTrigger value="api" className="rounded-lg px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm transition-all">
+          <TabsTrigger value="api" className="rounded-xl px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm transition-all">
             API Entegrasyonları
           </TabsTrigger>
-          <TabsTrigger value="menu" className="rounded-lg px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-orange-700 data-[state=active]:shadow-sm transition-all">
+          <TabsTrigger value="menu" className="rounded-xl px-6 py-2.5 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-orange-700 data-[state=active]:shadow-sm transition-all">
             Menü & SEO Navigasyonu
           </TabsTrigger>
         </TabsList>

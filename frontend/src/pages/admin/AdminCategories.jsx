@@ -32,7 +32,7 @@ function CategoryList({ items, setItems, title, icon: Icon, filterType = null })
   const toggleExpand = (id) => setExpandedId(expandedId === id ? null : id);
 
   return (
-    <Card className="p-8 bg-white border-none shadow-sm rounded-2xl space-y-6">
+    <Card className="p-8 bg-white border-none shadow-sm rounded-xl space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
         <div>
           <div className="flex items-center gap-2">
@@ -67,11 +67,11 @@ function CategoryList({ items, setItems, title, icon: Icon, filterType = null })
                   </div>
                 )}
                 <div className="flex items-end gap-2 pt-5">
-                  <Button variant="outline" size="sm" onClick={() => toggleExpand(item.id)} className="rounded-lg">
+                  <Button variant="outline" size="sm" onClick={() => toggleExpand(item.id)} className="rounded-xl">
                     {isExpanded ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
                     Gelişmiş
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => deleteItem(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
+                  <Button variant="ghost" size="icon" onClick={() => deleteItem(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
@@ -195,10 +195,10 @@ export default function AdminCategories() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-6 p-1 bg-white border border-gray-100 rounded-xl inline-flex w-auto shadow-sm">
-          <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Ürün Kategorileri</TabsTrigger>
-          <TabsTrigger value="blogs" className="rounded-lg data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Blog Kategorileri</TabsTrigger>
-          <TabsTrigger value="collections" className="rounded-lg data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Koleksiyonlar</TabsTrigger>
-          <TabsTrigger value="filters" className="rounded-lg data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Filtreler</TabsTrigger>
+          <TabsTrigger value="products" className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Ürün Kategorileri</TabsTrigger>
+          <TabsTrigger value="blogs" className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Blog Kategorileri</TabsTrigger>
+          <TabsTrigger value="collections" className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Koleksiyonlar</TabsTrigger>
+          <TabsTrigger value="filters" className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Filtreler</TabsTrigger>
         </TabsList>
 
         <TabsContent value="products" className="outline-none mt-0">

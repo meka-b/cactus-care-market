@@ -244,7 +244,7 @@ export default function AdminProductEdit() {
                     <div className="pt-4 border-t border-slate-100">
                       <Label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Otomatik Etiketler</Label>
                       <div className="flex flex-wrap gap-1.5">
-                        {(form.tags || []).map(t => <span key={t} className="text-xs bg-emerald-50 border border-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md">#{t}</span>)}
+                        {(form.tags || []).map(t => <span key={t} className="text-xs bg-emerald-50 border border-emerald-100 text-emerald-700 px-2.5 py-1 rounded-xl">#{t}</span>)}
                       </div>
                     </div>
                   </div>
@@ -311,7 +311,7 @@ export default function AdminProductEdit() {
                     <div className="space-y-3 mt-4">
                       {(form.images || []).map((im, idx) => (
                         <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-3 shadow-sm flex gap-3 group relative transition-all hover:shadow-md">
-                          <img src={resolveImageUrl(im.thumb || im.main)} alt={im.alt} className="w-20 h-20 object-cover rounded-lg border border-slate-200" />
+                          <img src={resolveImageUrl(im.thumb || im.main)} alt={im.alt} className="w-20 h-20 object-cover rounded-xl border border-slate-200" />
                           <div className="flex-1 min-w-0 flex flex-col justify-between">
                             <div className="flex items-center gap-2 mb-1">
                               {idx === 0 && <span className="text-[9px] font-bold uppercase bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">Kapak</span>}
@@ -408,7 +408,7 @@ export default function AdminProductEdit() {
              </div>
 
              {/* QUICK CARE TIPS */}
-             <div className="mb-16 bg-emerald-50/50 p-6 sm:p-8 rounded-[20px] border border-emerald-100">
+             <div className="mb-16 bg-emerald-50/50 p-6 sm:p-8 rounded-xl border border-emerald-100">
                <Label className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-widest text-emerald-600 mb-4 ml-1">
                  <Leaf className="w-4 h-4" /> Hızlı Bakım İpuçları (Madde Madde)
                </Label>

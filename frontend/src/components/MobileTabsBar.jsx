@@ -69,7 +69,7 @@ export function MobileTabsBar({ tabs = [], active, onSelect }) {
                 onClick={() => handleClick(t.value)}
                 className={[
                   'flex-[0_0_auto] whitespace-nowrap select-none',
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
                   isActive
                     ? 'bg-white text-foreground shadow-sm'

@@ -154,7 +154,7 @@ export default function AdminKnowledgeGraph() {
           ) : (
             <ul className="space-y-4">
               {jobs.map((job) => (
-                <li key={job.id} className="flex flex-col gap-2 p-3 bg-slate-50 border border-slate-100 rounded-lg">
+                <li key={job.id} className="flex flex-col gap-2 p-3 bg-slate-50 border border-slate-100 rounded-xl">
                   <div className="flex items-center gap-3 text-sm">
                     {job.status === 'idle' && <span className="w-2 h-2 rounded-full bg-slate-400" />}
                     {job.status === 'pending' && <span className="w-2 h-2 rounded-full bg-slate-300 animate-pulse" />}
@@ -240,7 +240,7 @@ export default function AdminKnowledgeGraph() {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {graph && Object.entries(graph.categories).map(([cat, count], i) => (
-                <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium flex items-center gap-2">
+                <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-sm font-medium flex items-center gap-2">
                   {cat}
                   <span className="bg-slate-300 text-slate-800 text-xs px-1.5 rounded">{count}</span>
                 </span>

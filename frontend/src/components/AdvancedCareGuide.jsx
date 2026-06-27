@@ -42,11 +42,11 @@ const Card = memo(({ sec, productName }) => {
 
   return (
     <div 
-      className={`relative w-64 sm:w-72 flex flex-col justify-end flex-shrink-0 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group ${!hasImage ? 'bg-white' : ''}`}
+      className={`relative w-64 sm:w-72 flex flex-col justify-end flex-shrink-0 rounded-xl p-6 sm:p-8 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group ${!hasImage ? 'bg-white' : ''}`}
     >
       {/* Background Image Container */}
       {hasImage && (
-        <div className="absolute inset-0 rounded-3xl overflow-hidden z-0">
+        <div className="absolute inset-0 rounded-xl overflow-hidden z-0">
           <img 
             src={sec.data.image} 
             alt={seoTitle}
@@ -59,7 +59,7 @@ const Card = memo(({ sec, productName }) => {
 
       {/* Top Left Icon (Only if no image) */}
       {!hasImage && (
-        <div className="absolute -top-5 -left-5 w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-sm transform -rotate-6 border-4 border-white group-hover:scale-110 transition-transform duration-300 z-20">
+        <div className="absolute -top-5 -left-5 w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shadow-sm transform -rotate-6 border-4 border-white group-hover:scale-110 transition-transform duration-300 z-20">
           <Icon className="w-5 h-5" />
         </div>
       )}
@@ -115,7 +115,7 @@ export function AdvancedCareGuide({ product }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       
       {/* Bounded Box */}
-      <div className="flex flex-col justify-center overflow-hidden py-12 sm:py-16 bg-[#FAFCFB] rounded-[2.5rem] sm:rounded-[3rem] border border-[hsl(var(--primary))]/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative">
+      <div className="flex flex-col justify-center overflow-hidden py-12 sm:py-16 bg-[#FAFCFB] rounded-xl sm:rounded-xl border border-[hsl(var(--primary))]/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative">
         
         <div className="text-center mb-8 relative z-20 px-4">
           <h2 id="advanced-care-heading" className="text-2xl sm:text-3xl font-bold font-heading text-slate-800 tracking-tight">Bu Türe Özel Bakım Tavsiyelerimiz</h2>
@@ -126,9 +126,9 @@ export function AdvancedCareGuide({ product }) {
         <div className="absolute top-[60%] left-0 w-full h-px bg-[hsl(var(--primary))]/10 pointer-events-none hidden sm:block"></div>
 
         {/* Left Fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-[#FAFCFB] to-transparent z-10 pointer-events-none rounded-l-[3rem]"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-[#FAFCFB] to-transparent z-10 pointer-events-none rounded-l-xl"></div>
         {/* Right Fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-[#FAFCFB] to-transparent z-10 pointer-events-none rounded-r-[3rem]"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-[#FAFCFB] to-transparent z-10 pointer-events-none rounded-r-xl"></div>
         
         <div className="overflow-hidden w-full" ref={emblaRef}>
           <div className="flex gap-6 sm:gap-12 pt-8 pb-8 items-stretch cursor-grab active:cursor-grabbing px-6 sm:px-16">

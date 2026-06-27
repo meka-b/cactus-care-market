@@ -65,7 +65,7 @@ export function AdvancedGuideEditor({ value, onChange }) {
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg border border-slate-200">
+    <div className="space-y-6 bg-white p-6 rounded-xl border border-slate-200">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
           <h3 className="text-lg font-medium">Gelişmiş Bakım Rehberi (İnfografik)</h3>
@@ -89,14 +89,14 @@ export function AdvancedGuideEditor({ value, onChange }) {
             const Icon = section.icon;
 
             return (
-              <div key={section.id} className="p-4 border rounded-lg bg-slate-50 space-y-3">
+              <div key={section.id} className="p-4 border rounded-xl bg-slate-50 space-y-3">
                 <div className="flex items-center gap-2 mb-2 font-medium text-slate-700">
                   <Icon className="w-5 h-5 text-primary" />
                   {section.label}
                 </div>
                 
                 <textarea
-                  className="w-full text-sm border-slate-200 rounded-md p-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none h-20"
+                  className="w-full text-sm border-slate-200 rounded-xl p-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none h-20"
                   placeholder="Bu bölüm için açıklama girin..."
                   value={sectionData.text || ''}
                   onChange={(e) => handleTextChange(section.id, e.target.value)}
@@ -104,7 +104,7 @@ export function AdvancedGuideEditor({ value, onChange }) {
 
                 <div className="flex items-center gap-4">
                   {sectionData.image ? (
-                    <div className="relative w-16 h-16 rounded-md border bg-white overflow-hidden group">
+                    <div className="relative w-16 h-16 rounded-xl border bg-white overflow-hidden group">
                       <img src={sectionData.image} alt={section.label} className="w-full h-full object-contain" />
                       <button 
                         onClick={() => handleRemoveImage(section.id)}
@@ -115,7 +115,7 @@ export function AdvancedGuideEditor({ value, onChange }) {
                       </button>
                     </div>
                   ) : (
-                    <label className="flex items-center justify-center w-16 h-16 rounded-md border-2 border-dashed border-slate-300 hover:border-primary bg-white cursor-pointer transition-colors text-slate-400 hover:text-primary shrink-0">
+                    <label className="flex items-center justify-center w-16 h-16 rounded-xl border-2 border-dashed border-slate-300 hover:border-primary bg-white cursor-pointer transition-colors text-slate-400 hover:text-primary shrink-0">
                       <Upload className="w-5 h-5" />
                       <input 
                         type="file" 

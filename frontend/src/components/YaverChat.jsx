@@ -125,7 +125,7 @@ export function YaverChat() {
                                 <Info className="w-4 h-4" />
                               </div>
                             </TooltipTrigger>
-                            <TooltipContent side="right" align="center" className="max-w-xs bg-indigo-900 text-white p-3 rounded-lg shadow-xl text-xs z-[70]">
+                            <TooltipContent side="right" align="center" className="max-w-xs bg-indigo-900 text-white p-3 rounded-xl shadow-xl text-xs z-[70]">
                               <div className="font-semibold mb-1 text-indigo-200">🤖 RAG Referansları ({m.sources.length})</div>
                               <ul className="space-y-2 max-h-48 overflow-y-auto pr-1">
                                 {m.sources.map((src, idx) => (

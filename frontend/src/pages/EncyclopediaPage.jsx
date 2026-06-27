@@ -39,7 +39,7 @@ export default function EncyclopediaPage() {
 
       {loading ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {[1,2,3,4,5,6].map(i => <div key={i} className="h-32 shimmer rounded-2xl" />)}
+          {[1,2,3,4,5,6].map(i => <div key={i} className="h-32 shimmer rounded-xl" />)}
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">

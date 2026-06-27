@@ -108,7 +108,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
           
           <div className="flex justify-center mb-8 px-4 lg:px-0">
             {/* Desktop Tabs */}
-            <TabsList className="hidden sm:inline-flex h-auto p-2 bg-[#FAFCFB] border border-[hsl(var(--primary))]/10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <TabsList className="hidden sm:inline-flex h-auto p-2 bg-[#FAFCFB] border border-[hsl(var(--primary))]/10 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
               <TabsTrigger value="desc" className="rounded-full px-8 py-3.5 text-sm font-bold font-heading tracking-wide text-slate-500 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-md transition-all duration-300">Açıklama</TabsTrigger>
               <TabsTrigger value="care" className="rounded-full px-8 py-3.5 text-sm font-bold font-heading tracking-wide text-slate-500 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-md transition-all duration-300">Bakım Rehberi</TabsTrigger>
               <TabsTrigger value="reviews" className="rounded-full px-8 py-3.5 text-sm font-bold font-heading tracking-wide text-slate-500 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-md transition-all duration-300" data-testid="tab-reviews">İncelemeler</TabsTrigger>
@@ -130,7 +130,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
             </div>
           </div>
 
-          <div className="bg-[#FAFCFB] sm:rounded-[3rem] border-y sm:border border-[hsl(var(--primary))]/10 sm:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] p-6 sm:p-12 lg:p-16 relative overflow-hidden min-h-[400px]">
+          <div className="bg-[#FAFCFB] sm:rounded-xl border-y sm:border border-[hsl(var(--primary))]/10 sm:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] p-6 sm:p-12 lg:p-16 relative overflow-hidden min-h-[400px]">
             <div className="absolute top-0 right-0 -mt-24 -mr-24 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50 pointer-events-none hidden sm:block"></div>
             
             <TabsContent value="desc" className="mt-0 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -161,7 +161,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
                 <h3 className="text-xl font-bold font-heading text-emerald-800 mb-6">Bakım İpuçları</h3>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {(product.care_tips || []).map((tip, i) => (
-                    <li key={i} className="flex items-start gap-3 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <li key={i} className="flex items-start gap-3 bg-white p-5 rounded-xl shadow-sm border border-slate-100">
                       <ChevronRight className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                       <span className="text-slate-600 font-medium leading-relaxed">{tip}</span>
                     </li>
@@ -181,15 +181,15 @@ export default function ProductDetailDefault({ product, data, slug }) {
 
             <TabsContent value="ship" className="mt-0 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
                <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                   <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                 <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                   <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
                      <Truck className="w-7 h-7" />
                    </div>
                    <h4 className="font-bold font-heading text-slate-800 text-xl mb-3">Kargo Süreci</h4>
                    <p className="text-slate-600 font-medium leading-relaxed">Siparişiniz 24 saat içinde özenle hazırlanıp kargolanır. 500 TL ve üzeri alışverişlerinizde kargo ücretsizdir.</p>
                  </div>
-                 <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                   <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                 <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                   <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
                      <RefreshCcw className="w-7 h-7" />
                    </div>
                    <h4 className="font-bold font-heading text-slate-800 text-xl mb-3">İade Koşulları</h4>

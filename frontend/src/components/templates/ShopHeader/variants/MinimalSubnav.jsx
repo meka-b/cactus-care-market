@@ -41,8 +41,8 @@ export default function ShopHeaderMinimalSubnav({ slug, data }) {
             return (
               <div key={idx} className="flex-none">
                 <Link to={`/k/${cat.slug}`} className="block">
-                  <div className={`flex items-center gap-3 px-4 py-2.5 rounded-[12px] border transition-colors ${isActive ? 'border-gray-900 bg-gray-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'}`}>
-                    <div className="w-8 h-8 rounded-md bg-[#F2F2F2] flex items-center justify-center shrink-0">
+                  <div className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-colors ${isActive ? 'border-gray-900 bg-gray-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'}`}>
+                    <div className="w-8 h-8 rounded-xl bg-[#F2F2F2] flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4 text-gray-700" strokeWidth={2} />
                     </div>
                     <span className={`text-sm font-semibold pr-2 ${isActive ? 'text-gray-900' : 'text-gray-700'}`}>

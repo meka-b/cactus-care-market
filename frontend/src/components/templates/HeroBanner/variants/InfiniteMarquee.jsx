@@ -103,7 +103,7 @@ export default function HeroBannerInfiniteMarquee() {
               <img 
                 src={item.image} 
                 alt="Collectible" 
-                className="w-full aspect-[4/5] object-cover rounded-2xl shadow-md hover:opacity-90 transition-opacity"
+                className="w-full aspect-[4/5] object-cover rounded-xl shadow-md hover:opacity-90 transition-opacity"
               />
             );
 
@@ -123,7 +123,7 @@ export default function HeroBannerInfiniteMarquee() {
   };
 
   return (
-    <section className="relative bg-[#1A1110] text-white overflow-hidden rounded-[24px] lg:rounded-[40px] max-w-6xl mx-4 lg:mx-auto my-8">
+    <section className="relative bg-[#1A1110] text-white overflow-hidden rounded-xl lg:rounded-xl max-w-6xl mx-4 lg:mx-auto my-8">
       {/* Background glow effects */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-red-900/20 blur-[120px] rounded-full"></div>

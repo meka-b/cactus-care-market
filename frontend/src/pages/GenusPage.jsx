@@ -46,7 +46,7 @@ export default function GenusPage() {
       ]} />
       
       <div className="mt-8 flex items-center gap-4 border-b pb-6">
-        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 flex items-center justify-center rounded-2xl shrink-0">
+        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 flex items-center justify-center rounded-xl shrink-0">
           <Leaf className="w-8 h-8" />
         </div>
         <div>
@@ -107,7 +107,7 @@ export default function GenusPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 {blogs.map(b => (
                   <Link key={b.id} to={`/blog/${b.slug}`} className="group flex gap-3 p-3 border border-slate-200 rounded-xl hover:bg-slate-50">
-                    {b.cover_image && <img src={resolveImageUrl(b.cover_image)} className="w-20 h-20 object-cover rounded-lg shrink-0" alt={b.title} />}
+                    {b.cover_image && <img src={resolveImageUrl(b.cover_image)} className="w-20 h-20 object-cover rounded-xl shrink-0" alt={b.title} />}
                     <div className="flex-1 min-w-0 py-1">
                       <h3 className="font-medium text-slate-900 line-clamp-2 group-hover:text-emerald-600 transition-colors">{b.title}</h3>
                       {b.published_at && <span className="text-xs text-slate-500 mt-2 block">{new Date(b.published_at).toLocaleDateString('tr-TR')}</span>}
@@ -121,7 +121,7 @@ export default function GenusPage() {
 
         {/* Right Column: Sticky Sidebar */}
         <aside className="lg:sticky lg:top-24 space-y-6">
-          <Card className="p-6 bg-slate-50/50 border-slate-200 shadow-sm rounded-2xl">
+          <Card className="p-6 bg-slate-50/50 border-slate-200 shadow-sm rounded-xl">
             <h3 className="font-heading font-semibold text-lg flex items-center gap-2 mb-4">
               <BookOpen className="w-5 h-5 text-emerald-600" />
               Cins Özeti

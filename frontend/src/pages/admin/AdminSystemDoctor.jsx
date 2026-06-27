@@ -60,10 +60,10 @@ export default function AdminSystemDoctor() {
     <div className="max-w-6xl mx-auto pb-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+      <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 bg-white p-8 rounded-xl shadow-sm border border-slate-100">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
               <Activity className="w-8 h-8" />
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function AdminSystemDoctor() {
           <Button 
             onClick={runScan} 
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200 px-8 py-6 rounded-2xl text-lg font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200 px-8 py-6 rounded-xl text-lg font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             {loading ? 'Taranıyor...' : 'Tam Tarama Başlat'}
@@ -89,7 +89,7 @@ export default function AdminSystemDoctor() {
       </div>
 
       {!data && !loading && (
-        <Card className="p-16 text-center border-dashed border-2 border-slate-200 rounded-3xl bg-slate-50/50">
+        <Card className="p-16 text-center border-dashed border-2 border-slate-200 rounded-xl bg-slate-50/50">
           <Activity className="w-16 h-16 text-slate-300 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-slate-700 mb-2">Henüz Tarama Yapılmadı</h3>
           <p className="text-slate-500 mb-6">Sisteminizin sağlığını ölçmek için hemen bir tarama başlatın.</p>
@@ -102,7 +102,7 @@ export default function AdminSystemDoctor() {
           
           {/* Sol Kolon: Skor ve Özet */}
           <div className="lg:col-span-1 space-y-6">
-            <Card className="p-8 rounded-3xl bg-gradient-to-b from-white to-slate-50 border-slate-100 shadow-sm text-center relative overflow-hidden">
+            <Card className="p-8 rounded-xl bg-gradient-to-b from-white to-slate-50 border-slate-100 shadow-sm text-center relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-emerald-400 to-indigo-400"></div>
               <h3 className="text-slate-500 font-medium mb-6">Genel Sağlık Skoru</h3>
               
@@ -125,20 +125,20 @@ export default function AdminSystemDoctor() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500" /><span className="text-sm font-medium text-slate-700">Başarılı</span></div>
-                  <span className="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-lg">{data.passed}</span>
+                  <span className="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-xl">{data.passed}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-xl bg-orange-50/50 border border-orange-100/50">
                   <div className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-orange-500" /><span className="text-sm font-medium text-slate-700">Uyarı</span></div>
-                  <span className="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-lg">{data.warnings}</span>
+                  <span className="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-xl">{data.warnings}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-xl bg-red-50/50 border border-red-100/50">
                   <div className="flex items-center gap-2"><XCircle className="w-4 h-4 text-red-500" /><span className="text-sm font-medium text-slate-700">Kritik Hata</span></div>
-                  <span className="font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-lg">{data.errors}</span>
+                  <span className="font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-xl">{data.errors}</span>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 rounded-3xl border-slate-100 shadow-sm">
+            <Card className="p-6 rounded-xl border-slate-100 shadow-sm">
               <h3 className="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider flex items-center gap-2">
                 <Clock className="w-4 h-4 text-slate-400" />
                 Geçmiş Taramalar
@@ -148,7 +148,7 @@ export default function AdminSystemDoctor() {
                   <button key={h.id} onClick={() => setData(h)} className={`w-full text-left p-3 rounded-xl transition-all ${data.id === h.id ? 'bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-slate-50 border border-transparent hover:border-slate-100'}`}>
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-sm font-medium text-slate-700">{new Date(h.created_at).toLocaleDateString('tr-TR', { day:'numeric', month:'short' })}</span>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${h.score > 80 ? 'bg-emerald-100 text-emerald-700' : h.score > 50 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-xl ${h.score > 80 ? 'bg-emerald-100 text-emerald-700' : h.score > 50 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
                         {h.score} Puan
                       </span>
                     </div>
@@ -162,7 +162,7 @@ export default function AdminSystemDoctor() {
           {/* Sağ Kolon: Detaylı Sonuçlar */}
           <div className="lg:col-span-3 space-y-6">
             {Object.entries(data.results || {}).map(([category, checks]) => (
-              <Card key={category} className="p-6 rounded-3xl border-slate-100 shadow-sm overflow-hidden">
+              <Card key={category} className="p-6 rounded-xl border-slate-100 shadow-sm overflow-hidden">
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
                   <div className="p-2.5 bg-slate-50 rounded-xl">
                     {getIcon(category)}
@@ -172,7 +172,7 @@ export default function AdminSystemDoctor() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {checks.map((check, idx) => (
-                    <div key={idx} className={`p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md ${check.status === 'success' ? 'bg-emerald-50/30 hover:bg-emerald-50 border border-emerald-100/50' : check.status === 'warning' ? 'bg-orange-50/50 border border-orange-200' : 'bg-red-50 border border-red-200'}`}>
+                    <div key={idx} className={`p-4 rounded-xl flex items-start gap-4 transition-all hover:shadow-md ${check.status === 'success' ? 'bg-emerald-50/30 hover:bg-emerald-50 border border-emerald-100/50' : check.status === 'warning' ? 'bg-orange-50/50 border border-orange-200' : 'bg-red-50 border border-red-200'}`}>
                       <div className="mt-0.5">
                         {check.status === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
                         {check.status === 'warning' && <AlertTriangle className="w-5 h-5 text-orange-500" />}

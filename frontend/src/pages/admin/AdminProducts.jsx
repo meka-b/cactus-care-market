@@ -39,17 +39,17 @@ export default function AdminProducts() {
               Stok Özeti
             </h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
                 <div className="text-2xl font-bold text-slate-800">{data.total}</div>
                 <div className="text-xs text-slate-500 font-medium">Kayıtlı Ürün</div>
               </div>
-              <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
                 <div className="text-2xl font-bold text-slate-800">{totalStock}</div>
                 <div className="text-xs text-slate-500 font-medium">Toplam Stok</div>
               </div>
             </div>
             {outOfStock > 0 && (
-              <div className="mt-4 flex items-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg text-sm border border-red-100">
+              <div className="mt-4 flex items-center gap-2 p-3 bg-red-50 text-red-700 rounded-xl text-sm border border-red-100">
                 <AlertCircle className="w-5 h-5 shrink-0" />
                 <p><strong>{outOfStock}</strong> ürünün stoğu tükenmiş. Hemen güncellemeniz önerilir.</p>
               </div>

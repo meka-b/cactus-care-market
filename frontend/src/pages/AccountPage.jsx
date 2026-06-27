@@ -46,7 +46,7 @@ export default function AccountPage() {
   }, [user]);
 
   if (!user) return (
-    <div className="max-w-md mx-auto p-10 mt-10 text-center bg-white rounded-2xl border shadow-sm">
+    <div className="max-w-md mx-auto p-10 mt-10 text-center bg-white rounded-xl border shadow-sm">
       <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
         <Lock className="w-8 h-8" />
       </div>
@@ -103,7 +103,7 @@ export default function AccountPage() {
         
         {/* Sidebar Navigation */}
         <aside className="w-full md:w-72 shrink-0">
-          <div className="bg-white rounded-2xl border shadow-sm p-4 sticky top-24">
+          <div className="bg-white rounded-xl border shadow-sm p-4 sticky top-24">
             <div className="flex items-center gap-4 p-4 mb-2">
               <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold uppercase">
                 {user.name?.charAt(0) || user.email?.charAt(0) || 'U'}
@@ -159,7 +159,7 @@ export default function AccountPage() {
                 <Card className="p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-0 shadow-md">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold opacity-90">Toplam Sipariş</h3>
-                    <div className="p-2 bg-white/20 rounded-lg"><ShoppingBag className="w-5 h-5" /></div>
+                    <div className="p-2 bg-white/20 rounded-xl"><ShoppingBag className="w-5 h-5" /></div>
                   </div>
                   <div className="text-4xl font-bold">{orders.length}</div>
                   <div className="mt-2 text-sm opacity-80">Bugüne kadar verdiğiniz sipariş sayısı</div>
@@ -168,7 +168,7 @@ export default function AccountPage() {
                 <Card className="p-6 bg-white border shadow-sm">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-gray-700">Hesap Tipi</h3>
-                    <div className="p-2 bg-gray-100 rounded-lg text-gray-600"><User className="w-5 h-5" /></div>
+                    <div className="p-2 bg-gray-100 rounded-xl text-gray-600"><User className="w-5 h-5" /></div>
                   </div>
                   <div className="text-2xl font-bold text-gray-900 capitalize">{user.role === 'admin' ? 'Yönetici' : 'Müşteri'}</div>
                   <div className="mt-2 text-sm text-gray-500">Kayıtlı E-posta: {user.email}</div>
@@ -200,7 +200,7 @@ export default function AccountPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Siparişlerim</h2>
               
               {orders.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-2xl border border-dashed">
+                <div className="text-center py-20 bg-white rounded-xl border border-dashed">
                   <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-1">Henüz siparişiniz yok</h3>
                   <p className="text-gray-500 mb-6">Mağazamızı inceleyerek ilk siparişinizi oluşturabilirsiniz.</p>
@@ -258,7 +258,7 @@ export default function AccountPage() {
                                   {o.tracking_code && (
                                     <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-center justify-between">
                                       <div className="flex items-center gap-3 text-blue-900">
-                                        <div className="p-2 bg-blue-100 rounded-lg"><Truck className="w-5 h-5" /></div>
+                                        <div className="p-2 bg-blue-100 rounded-xl"><Truck className="w-5 h-5" /></div>
                                         <div>
                                           <div className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-0.5">Kargo Takip No</div>
                                           <div className="font-mono font-bold text-base">{o.tracking_code}</div>
@@ -280,7 +280,7 @@ export default function AccountPage() {
                                     <div className="space-y-3">
                                       {o.items?.map((item, idx) => (
                                         <div key={idx} className="flex gap-4 p-3 bg-white rounded-xl border shadow-sm">
-                                          <div className="w-16 h-20 rounded-lg bg-gray-100 border overflow-hidden shrink-0">
+                                          <div className="w-16 h-20 rounded-xl bg-gray-100 border overflow-hidden shrink-0">
                                             {item.image ? (
                                               <img src={resolveImageUrl(item.image)} alt={item.name} className="w-full h-full object-cover" />
                                             ) : (
@@ -343,7 +343,7 @@ export default function AccountPage() {
                 {/* Profile Form */}
                 <Card className="p-6 bg-white border shadow-sm">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><User className="w-5 h-5" /></div>
+                    <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl"><User className="w-5 h-5" /></div>
                     <h3 className="text-lg font-bold">Kişisel Bilgiler</h3>
                   </div>
                   <form onSubmit={handleUpdateProfile} className="space-y-4">
@@ -377,7 +377,7 @@ export default function AccountPage() {
                 {/* Password Form */}
                 <Card className="p-6 bg-white border shadow-sm">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-orange-50 text-orange-600 rounded-lg"><Lock className="w-5 h-5" /></div>
+                    <div className="p-2 bg-orange-50 text-orange-600 rounded-xl"><Lock className="w-5 h-5" /></div>
                     <h3 className="text-lg font-bold">Şifre Değiştir</h3>
                   </div>
                   <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-md">

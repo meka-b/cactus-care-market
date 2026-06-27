@@ -53,7 +53,7 @@ export default function SpeciesPage() {
 
           {/* Gallery */}
           {species.images && species.images.length > 0 && (
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-sm">
+            <div className="relative h-[400px] rounded-xl overflow-hidden shadow-sm">
               <img src={species.images[0].url} alt={species.images[0].alt} className="w-full h-full object-cover" />
               {species.images[0].source && (
                 <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
@@ -174,7 +174,7 @@ export default function SpeciesPage() {
               <div className="space-y-3">
                 {species.products.map(prod => (
                   <Link key={prod.id} to={`/u/${prod.slug}`} className="flex items-center gap-3 group p-2 hover:bg-white rounded-xl transition-colors border border-transparent hover:border-emerald-100">
-                    <img src={resolveImageUrl(prod.images[0]?.thumb)} alt={prod.common_name_tr} className="w-12 h-12 rounded-lg object-cover" />
+                    <img src={resolveImageUrl(prod.images[0]?.thumb)} alt={prod.common_name_tr} className="w-12 h-12 rounded-xl object-cover" />
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-slate-800 line-clamp-1 group-hover:text-primary">{prod.common_name_tr}</div>
                       <div className="text-sm font-bold text-primary">{prod.price} TL</div>

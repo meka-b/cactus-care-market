@@ -336,14 +336,14 @@ export default function AdminBlogEditor() {
 
                 {activeTab === 'ai' && (
                   <div className="space-y-6">
-                    <div className="bg-indigo-50/80 rounded-[12px] p-5 border border-indigo-100 shadow-sm">
+                    <div className="bg-indigo-50/80 rounded-xl p-5 border border-indigo-100 shadow-sm">
                       <div className="flex items-center gap-2 text-indigo-800 font-bold mb-2">
                         <Brain className="w-5 h-5" /> RAG Destekli Makale
                       </div>
                       <p className="text-[11px] text-indigo-700/80 mb-5 leading-relaxed">
                         Sitenize yüklediğiniz ürünleri ve diğer içerikleri tarayarak otomatik olarak <strong>uzman tavsiyeli</strong> bir makale üretir. (Başlığa göre üretir)
                       </p>
-                      <Button onClick={handleRagGenerate} disabled={aiLoading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm rounded-lg">
+                      <Button onClick={handleRagGenerate} disabled={aiLoading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm rounded-xl">
                         {aiLoading ? 'Üretiliyor...' : 'Otomatik Yazı Üret'}
                       </Button>
                     </div>
@@ -420,9 +420,9 @@ export default function AdminBlogEditor() {
                         {relatedProducts.map(p => (
                           <div key={p.id} className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-2 shadow-sm group">
                             {p.images && p.images[0] ? (
-                              <img src={resolveImageUrl(p.images[0].thumb || p.images[0].main)} alt={p.common_name_tr} className="w-10 h-10 rounded-lg object-cover" />
+                              <img src={resolveImageUrl(p.images[0].thumb || p.images[0].main)} alt={p.common_name_tr} className="w-10 h-10 rounded-xl object-cover" />
                             ) : (
-                              <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center"><Package className="w-5 h-5 text-slate-300" /></div>
+                              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><Package className="w-5 h-5 text-slate-300" /></div>
                             )}
                             <div className="flex-1 min-w-0">
                               <div className="text-sm font-medium text-slate-700 truncate">{p.common_name_tr}</div>

@@ -104,13 +104,13 @@ export default function HeaderNavbarEvon({
                 <DropdownMenuContent align="end" className="bg-white w-56 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-gray-100 p-2 mt-2">
                   <div className="px-2 py-1.5 text-sm"><div className="font-medium text-gray-900">{user.name}</div><div className="text-xs text-gray-500">{user.email}</div></div>
                   <DropdownMenuSeparator className="bg-gray-100 my-1" />
-                  <DropdownMenuItem className="rounded-lg cursor-pointer" onClick={() => navigate('/hesap')}><User className="mr-2 h-4 w-4 text-gray-500" />Hesabım</DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-lg cursor-pointer" onClick={() => navigate('/hesap/favorilerim')}><Heart className="mr-2 h-4 w-4 text-gray-500" />Favorilerim</DropdownMenuItem>
+                  <DropdownMenuItem className="rounded-xl cursor-pointer" onClick={() => navigate('/hesap')}><User className="mr-2 h-4 w-4 text-gray-500" />Hesabım</DropdownMenuItem>
+                  <DropdownMenuItem className="rounded-xl cursor-pointer" onClick={() => navigate('/hesap/favorilerim')}><Heart className="mr-2 h-4 w-4 text-gray-500" />Favorilerim</DropdownMenuItem>
                   {user.role === 'admin' && (
-                    <DropdownMenuItem className="rounded-lg cursor-pointer" onClick={() => navigate('/admin')}><Settings className="mr-2 h-4 w-4 text-gray-500" />Yönetim Paneli</DropdownMenuItem>
+                    <DropdownMenuItem className="rounded-xl cursor-pointer" onClick={() => navigate('/admin')}><Settings className="mr-2 h-4 w-4 text-gray-500" />Yönetim Paneli</DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator className="bg-gray-100 my-1" />
-                  <DropdownMenuItem className="rounded-lg cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50" onClick={logout}><LogOut className="mr-2 h-4 w-4" />Çıkış</DropdownMenuItem>
+                  <DropdownMenuItem className="rounded-xl cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50" onClick={logout}><LogOut className="mr-2 h-4 w-4" />Çıkış</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -131,7 +131,7 @@ export default function HeaderNavbarEvon({
         {/* Mobile Search Dropdown */}
         {mobileSearch && (
           <div className="absolute top-20 left-4 right-4 xl:hidden z-40">
-            <form onSubmit={onSearch} className="bg-white p-3 rounded-2xl shadow-xl flex gap-2 border border-gray-100">
+            <form onSubmit={onSearch} className="bg-white p-3 rounded-xl shadow-xl flex gap-2 border border-gray-100">
               <Input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Ara..." className="flex-1 rounded-xl h-10 bg-gray-50 border-transparent text-sm" />
               <Button type="button" variant="ghost" className="rounded-xl h-10 text-sm" onClick={() => setMobileSearch(false)}>İptal</Button>
             </form>

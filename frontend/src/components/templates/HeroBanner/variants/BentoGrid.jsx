@@ -38,7 +38,7 @@ export default function HeroBannerBentoGrid() {
   };
 
   const renderMainBox = () => (
-    <div className="bg-[#F3F4F3] rounded-[24px] p-6 sm:p-12 w-full h-full flex flex-col sm:flex-row relative overflow-hidden group">
+    <div className="bg-[#F3F4F3] rounded-xl p-6 sm:p-12 w-full h-full flex flex-col sm:flex-row relative overflow-hidden group">
       <div className="relative z-10 w-full sm:w-1/2 flex flex-col items-start justify-center">
         <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-gray-500 uppercase mb-3">
           {badge}
@@ -63,7 +63,7 @@ export default function HeroBannerBentoGrid() {
   );
 
   const renderSmallBox1 = () => (
-    <div className="bg-[#EBECE8] rounded-[24px] relative overflow-hidden group cursor-pointer w-full h-full">
+    <div className="bg-[#EBECE8] rounded-xl relative overflow-hidden group cursor-pointer w-full h-full">
       {content?.bottomLeftImage1Link ? (
         <Link to={content.bottomLeftImage1Link} className="block w-full h-full absolute inset-0" title={content?.bottomLeftImage1Alt || "Sol Alt Görsel 1"}>
           <img src={getImageUrl(bottomLeftImage1Prompt)} alt={content?.bottomLeftImage1Alt || "Sol Alt Görsel 1"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -75,7 +75,7 @@ export default function HeroBannerBentoGrid() {
   );
 
   const renderSmallBox2 = () => (
-    <div className="bg-[#DCE1DB] rounded-[24px] relative overflow-hidden group cursor-pointer w-full h-full">
+    <div className="bg-[#DCE1DB] rounded-xl relative overflow-hidden group cursor-pointer w-full h-full">
       {content?.bottomLeftImage2Link ? (
         <Link to={content.bottomLeftImage2Link} className="block w-full h-full absolute inset-0" title={content?.bottomLeftImage2Alt || "Sol Alt Görsel 2"}>
           <img src={getImageUrl(bottomLeftImage2Prompt)} alt={content?.bottomLeftImage2Alt || "Sol Alt Görsel 2"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -87,7 +87,7 @@ export default function HeroBannerBentoGrid() {
   );
 
   const renderTallBox = () => (
-    <div className="bg-[#F5F5F5] rounded-[24px] relative overflow-hidden group w-full h-full cursor-pointer">
+    <div className="bg-[#F5F5F5] rounded-xl relative overflow-hidden group w-full h-full cursor-pointer">
       {content?.rightTallImageLink ? (
         <Link to={content.rightTallImageLink} className="block w-full h-full absolute inset-0" title={content?.rightTallImageAlt || "Sağ Dikey Görsel"}>
           <img src={getImageUrl(rightTallImagePrompt)} alt={content?.rightTallImageAlt || "Sağ Dikey Görsel"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />

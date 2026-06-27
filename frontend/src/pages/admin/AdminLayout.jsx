@@ -64,7 +64,7 @@ export default function AdminLayout() {
       {/* 1. Panel: Sol Sidebar (Desktop) */}
       <aside className="hidden lg:flex w-[260px] bg-white border-r border-slate-200 flex-col p-5 sticky top-0 h-screen shrink-0 z-20">
         <Link to="/admin" className="flex items-center gap-3 mb-8 px-2">
-          <div className="w-10 h-10 rounded-[12px] bg-emerald-500 text-white grid place-items-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white grid place-items-center shadow-sm">
             <Leaf className="w-6 h-6" />
           </div>
           <div>
@@ -84,10 +84,10 @@ export default function AdminLayout() {
       {/* Mobil Header & Hamburger Menü */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-4">
         <Link to="/admin" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white grid place-items-center"><Leaf className="w-5 h-5" /></div>
+          <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white grid place-items-center"><Leaf className="w-5 h-5" /></div>
           <span className="font-bold font-heading">Admin</span>
         </Link>
-        <button onClick={() => setMobileMenuOpen(true)} className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+        <button onClick={() => setMobileMenuOpen(true)} className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
           <Menu className="w-6 h-6" />
         </button>
       </div>
@@ -99,7 +99,7 @@ export default function AdminLayout() {
             <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', bounce: 0, duration: 0.3 }} className="fixed inset-y-0 left-0 w-[280px] bg-white shadow-2xl z-50 flex flex-col p-5 lg:hidden">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-[12px] bg-emerald-500 text-white grid place-items-center"><Leaf className="w-6 h-6" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white grid place-items-center"><Leaf className="w-6 h-6" /></div>
                   <div className="font-bold font-heading text-base">Menü</div>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-slate-500 hover:bg-slate-100 rounded-full"><X className="w-5 h-5" /></button>

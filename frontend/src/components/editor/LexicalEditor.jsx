@@ -83,7 +83,7 @@ export default function LexicalEditor({ content, onChange, onUploadImage, onEdit
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <EditorRefPlugin onEditorReady={onEditorReady} />
-      <div className="lexical-editor-container flex flex-col md:flex-row items-start border border-border rounded-lg bg-white shadow-sm overflow-visible">
+      <div className="lexical-editor-container flex flex-col md:flex-row items-start border border-border rounded-xl bg-white shadow-sm overflow-visible">
         <ToolbarPlugin onUploadImage={onUploadImage} />
         <div className="relative flex-1 min-w-0 w-full border-t md:border-t-0 md:border-l border-slate-200 bg-white z-0 cursor-text" onClick={() => {
           // If clicked outside the actual text, we can focus the editor.

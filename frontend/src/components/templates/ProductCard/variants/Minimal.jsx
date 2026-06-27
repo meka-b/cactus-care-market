@@ -59,7 +59,7 @@ export default function ProductCardMinimal({ product, imageRatio = '1:1' }) {
         {/* Out of stock badge */}
         {isOutOfStock && (
           <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-20">
-            <span className="bg-black text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm">
+            <span className="bg-black text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-xl">
               Tükendi
             </span>
           </div>
@@ -92,7 +92,7 @@ export default function ProductCardMinimal({ product, imageRatio = '1:1' }) {
               toast.success('Sepete eklendi');
             }}
             disabled={isOutOfStock}
-            className="w-full py-2.5 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-2.5 px-4 rounded-xl bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
           >
             Sepete Ekle
           </button>

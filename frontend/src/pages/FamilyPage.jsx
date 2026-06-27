@@ -23,7 +23,7 @@ export default function FamilyPage() {
       <SiteBreadcrumb items={[{ label: 'Ansiklopedi', href: '/bilgi' }, { label: family.name }]} />
       
       <div className="mt-8 flex items-center gap-4 border-b pb-6">
-        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 flex items-center justify-center rounded-2xl shrink-0">
+        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 flex items-center justify-center rounded-xl shrink-0">
           <Leaf className="w-8 h-8" />
         </div>
         <div>
@@ -62,7 +62,7 @@ export default function FamilyPage() {
 
         {/* Right Column: Sticky Sidebar */}
         <aside className="lg:sticky lg:top-24 space-y-6">
-          <Card className="p-6 bg-slate-50/50 border-slate-200 shadow-sm rounded-2xl">
+          <Card className="p-6 bg-slate-50/50 border-slate-200 shadow-sm rounded-xl">
             <h3 className="font-heading font-semibold text-lg flex items-center gap-2 mb-4">
               <BookOpen className="w-5 h-5 text-emerald-600" />
               Familya Özeti

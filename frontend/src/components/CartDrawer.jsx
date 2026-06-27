@@ -44,7 +44,7 @@ export function CartDrawer() {
                     <div className="space-y-2 pl-2 border-l-2 border-primary/30">
                       {items.filter(i => i.bundle_id === b.bundle_id).map(it => (
                         <div key={`${b.bundle_id}-${it.product_id}`} className="flex items-center gap-2 text-sm" data-testid={`cart-bundle-item-${it.product_id}`}>
-                          {it.image && <img src={resolveImageUrl(it.image)} alt={it.name} className="w-10 h-12 object-cover rounded-lg" />}
+                          {it.image && <img src={resolveImageUrl(it.image)} alt={it.name} className="w-10 h-12 object-cover rounded-xl" />}
                           <div className="flex-1 line-clamp-1">{it.name}</div>
                           <div className="font-medium">₺{(it.price * it.quantity).toFixed(2)}</div>
                         </div>

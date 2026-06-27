@@ -110,7 +110,7 @@ function ProductPicker({ value, onChange, multiple = false, label, testid, exclu
                   type="button"
                   key={r.id}
                   onClick={() => handlePick(r)}
-                  className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-[hsl(var(--accent))] text-sm"
+                  className="w-full text-left px-2 py-1.5 rounded-xl hover:bg-[hsl(var(--accent))] text-sm"
                 >
                   {r.common_name_tr}
                   <span className="text-[10px] text-muted-foreground ml-2">₺{(r.price || 0).toFixed(2)}</span>

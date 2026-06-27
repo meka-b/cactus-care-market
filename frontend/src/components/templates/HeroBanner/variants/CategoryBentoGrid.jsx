@@ -65,7 +65,7 @@ export default function HeroBannerCategoryBentoGrid() {
           <div className="flex touch-pan-y items-stretch">
             {/* Box 1 */}
             <div className="flex-[0_0_100%] min-w-0 pr-4">
-              <Link to={getLink(1)} className="block w-full aspect-square rounded-[24px] overflow-hidden relative bg-[#FADADD] p-6 flex flex-col justify-between group">
+              <Link to={getLink(1)} className="block w-full aspect-square rounded-xl overflow-hidden relative bg-[#FADADD] p-6 flex flex-col justify-between group">
                 <div className="absolute inset-0 z-0">
                   <img src={getImageUrl(box1ImagePrompt)} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt={box1Label}/>
                 </div>
@@ -84,11 +84,11 @@ export default function HeroBannerCategoryBentoGrid() {
             {/* Box 2 & 3 */}
             <div className="flex-[0_0_100%] min-w-0 pr-4">
               <div className="flex flex-col gap-4 h-full aspect-square">
-                <Link to={getLink(2)} className="flex-1 rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center">
+                <Link to={getLink(2)} className="flex-1 rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center">
                   <img src={getImageUrl(box2ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box2Label}/>
                   <div className="relative z-10">{renderLabel(box2Label)}</div>
                 </Link>
-                <Link to={getLink(3)} className="flex-1 rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center">
+                <Link to={getLink(3)} className="flex-1 rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center">
                   <img src={getImageUrl(box3ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box3Label}/>
                   <div className="relative z-10">{renderLabel(box3Label)}</div>
                 </Link>
@@ -97,7 +97,7 @@ export default function HeroBannerCategoryBentoGrid() {
 
             {/* Box 4 */}
             <div className="flex-[0_0_100%] min-w-0 pr-4">
-              <Link to={getLink(4)} className="block w-full aspect-square rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center">
+              <Link to={getLink(4)} className="block w-full aspect-square rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center">
                 <img src={getImageUrl(box4ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box4Label}/>
                 <div className="relative z-10">{renderLabel(box4Label)}</div>
               </Link>
@@ -105,7 +105,7 @@ export default function HeroBannerCategoryBentoGrid() {
 
             {/* Box 5 */}
             <div className="flex-[0_0_100%] min-w-0 pr-4">
-              <Link to={getLink(5)} className="block w-full aspect-square rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center">
+              <Link to={getLink(5)} className="block w-full aspect-square rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center">
                 <img src={getImageUrl(box5ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box5Label}/>
                 <div className="relative z-10">{renderLabel(box5Label)}</div>
               </Link>
@@ -118,7 +118,7 @@ export default function HeroBannerCategoryBentoGrid() {
           
           {/* Box 1: Left */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="col-span-2 row-span-2">
-            <Link to={getLink(1)} className="block w-full h-full rounded-[24px] overflow-hidden relative group bg-[#fce4ec] p-10 flex flex-col justify-between shadow-sm">
+            <Link to={getLink(1)} className="block w-full h-full rounded-xl overflow-hidden relative group bg-[#fce4ec] p-10 flex flex-col justify-between shadow-sm">
               <div className="absolute inset-0 z-0">
                 <img src={getImageUrl(box1ImagePrompt)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box1Label}/>
               </div>
@@ -138,21 +138,21 @@ export default function HeroBannerCategoryBentoGrid() {
           {/* Box 2, 3, 4: Middle Column */}
           <div className="col-span-2 row-span-2 grid grid-cols-2 grid-rows-2 gap-4">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="col-span-1 row-span-1">
-              <Link to={getLink(2)} className="block w-full h-full rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
+              <Link to={getLink(2)} className="block w-full h-full rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
                 <img src={getImageUrl(box2ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box2Label}/>
                 <div className="relative z-10">{renderLabel(box2Label)}</div>
               </Link>
             </motion.div>
             
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="col-span-1 row-span-1">
-              <Link to={getLink(3)} className="block w-full h-full rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
+              <Link to={getLink(3)} className="block w-full h-full rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
                 <img src={getImageUrl(box3ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box3Label}/>
                 <div className="relative z-10">{renderLabel(box3Label)}</div>
               </Link>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="col-span-2 row-span-1">
-              <Link to={getLink(4)} className="block w-full h-full rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
+              <Link to={getLink(4)} className="block w-full h-full rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
                 <img src={getImageUrl(box4ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box4Label}/>
                 <div className="relative z-10">{renderLabel(box4Label)}</div>
               </Link>
@@ -161,7 +161,7 @@ export default function HeroBannerCategoryBentoGrid() {
 
           {/* Box 5: Right */}
           <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="col-span-1 row-span-2">
-            <Link to={getLink(5)} className="block w-full h-full rounded-[24px] overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
+            <Link to={getLink(5)} className="block w-full h-full rounded-xl overflow-hidden relative group bg-gray-100 flex items-center justify-center shadow-sm">
               <img src={getImageUrl(box5ImagePrompt)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={box5Label}/>
               <div className="relative z-10">{renderLabel(box5Label)}</div>
             </Link>

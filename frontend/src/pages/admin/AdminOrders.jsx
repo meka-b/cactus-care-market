@@ -101,7 +101,7 @@ export default function AdminOrders() {
     <div className="h-[calc(100vh-6rem)] flex flex-col md:flex-row gap-6">
       
       {/* LEFT PANEL: Order List */}
-      <div className="w-full md:w-1/3 xl:w-1/4 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="w-full md:w-1/3 xl:w-1/4 flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <h1 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
             <Package className="w-5 h-5 text-gray-500" />
@@ -144,7 +144,7 @@ export default function AdminOrders() {
       </div>
 
       {/* RIGHT PANEL: Order Detail */}
-      <div className="w-full md:w-2/3 xl:w-3/4 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
+      <div className="w-full md:w-2/3 xl:w-3/4 flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden relative">
         {!selectedId ? (
           <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
             <Package className="w-16 h-16 text-gray-200 mb-4" />
@@ -152,7 +152,7 @@ export default function AdminOrders() {
           </div>
         ) : detailLoading ? (
           <div className="p-8 space-y-6">
-            <div className="shimmer h-8 w-1/3 rounded-md" />
+            <div className="shimmer h-8 w-1/3 rounded-xl" />
             <div className="shimmer h-32 rounded-xl" />
             <div className="shimmer h-64 rounded-xl" />
           </div>
@@ -200,7 +200,7 @@ export default function AdminOrders() {
                         {selectedOrder.items?.map((item, idx) => (
                           <tr key={idx} className="border-b border-gray-50 last:border-0 group">
                             <td className="p-4 w-16">
-                              <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                              <div className="w-12 h-12 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                                 {item.image ? (
                                   <img src={resolveImageUrl(item.image)} alt={item.name} className="w-full h-full object-cover" />
                                 ) : (

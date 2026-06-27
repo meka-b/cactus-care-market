@@ -47,11 +47,11 @@ export default function ProductCardMetro({ product, imageRatio = '1:1' }) {
   }, [emblaApi]);
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-[28px] p-3 shadow-[0_2px_12px_rgb(0,0,0,0.04)] font-sans group border border-gray-100 relative">
+    <div className="flex flex-col h-full bg-white rounded-xl p-3 shadow-[0_2px_12px_rgb(0,0,0,0.04)] font-sans group border border-gray-100 relative">
       
       {/* Image Container with Embla */}
       {/* Image Container with Embla */}
-      <div className="relative w-full rounded-[20px] overflow-hidden bg-[#F4F5F7] mb-5 group-hover:bg-[#EBECEE] transition-colors duration-300" style={{ aspectRatio: { '1:1': '1 / 1', '3:4': '3 / 4', '4:5': '4 / 5' }[imageRatio] || '1 / 1' }}>
+      <div className="relative w-full rounded-xl overflow-hidden bg-[#F4F5F7] mb-5 group-hover:bg-[#EBECEE] transition-colors duration-300" style={{ aspectRatio: { '1:1': '1 / 1', '3:4': '3 / 4', '4:5': '4 / 5' }[imageRatio] || '1 / 1' }}>
         
         {/* Top-left Brand Logo / Icon */}
         <div className="absolute top-4 left-4 z-10">

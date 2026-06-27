@@ -68,7 +68,7 @@ export default function PlantIdTool() {
       {!preview ? (
         <div 
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-emerald-200 rounded-2xl p-10 flex flex-col items-center justify-center text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400 transition-colors cursor-pointer"
+          className="border-2 border-dashed border-emerald-200 rounded-xl p-10 flex flex-col items-center justify-center text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400 transition-colors cursor-pointer"
         >
           <Upload className="w-10 h-10 mb-3 text-emerald-500" />
           <span className="font-medium">Fotoğraf Yükle veya Çek</span>
@@ -84,7 +84,7 @@ export default function PlantIdTool() {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-video flex items-center justify-center">
+          <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-video flex items-center justify-center">
             <img src={preview} alt="Preview" className="max-w-full max-h-full object-contain" />
             <button 
               onClick={clear}
@@ -107,7 +107,7 @@ export default function PlantIdTool() {
             </div>
           )}
 
-          {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
+          {error && <div className="p-3 bg-red-50 text-red-600 rounded-xl text-sm">{error}</div>}
 
           {result && (
             <div className="space-y-6 mt-6 animate-in fade-in slide-in-from-bottom-4">
@@ -120,7 +120,7 @@ export default function PlantIdTool() {
                   </h3>
                   <div className="space-y-3">
                     {result.result.classification.suggestions.slice(0, 3).map((sug, i) => (
-                      <div key={i} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                      <div key={i} className="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm">
                         <div>
                           <div className="font-semibold text-slate-800">{sug.name}</div>
                           {sug.details?.common_names?.length > 0 && (
@@ -145,7 +145,7 @@ export default function PlantIdTool() {
                   </h3>
                   <div className="space-y-3">
                     {result.result.disease.suggestions.slice(0, 3).map((dis, i) => (
-                      <div key={i} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                      <div key={i} className="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm">
                         <div className="font-semibold text-slate-800">{dis.name}</div>
                         <div className="text-sm font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded">
                           %{(dis.probability * 100).toFixed(1)}

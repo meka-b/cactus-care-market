@@ -44,7 +44,7 @@ function BundleProductRow({ product, isPrimary, isFree, checked, disabled, onTog
           checked={checked}
           disabled={disabled || isPrimary}
           onCheckedChange={() => !disabled && onToggle(product.id)}
-          className="rounded-sm data-[state=checked]:bg-black data-[state=checked]:border-black"
+          className="rounded-xl data-[state=checked]:bg-black data-[state=checked]:border-black"
           data-testid={`bundle-check-${product.id}`}
         />
       </div>
@@ -88,7 +88,7 @@ export default function BundleModuleMinimal({ productId }) {
 
   if (loading) {
     return (
-      <div className="p-5 bg-gray-50/50 rounded-2xl" data-testid="bundle-module-loading">
+      <div className="p-5 bg-gray-50/50 rounded-xl" data-testid="bundle-module-loading">
         <Skeleton className="h-4 w-32 mb-4" />
         <Skeleton className="h-12 w-full mb-3" />
         <Skeleton className="h-12 w-full" />
@@ -215,7 +215,7 @@ function BundleCard({ campaign, onAddBundle }) {
   };
 
   return (
-    <div className="bg-gray-50/50 rounded-2xl p-5" data-testid={`bundle-card-${campaign.id}`}>
+    <div className="bg-gray-50/50 rounded-xl p-5" data-testid={`bundle-card-${campaign.id}`}>
       {/* Header */}
       <div className="mb-4">
         <div className="flex items-center justify-between">

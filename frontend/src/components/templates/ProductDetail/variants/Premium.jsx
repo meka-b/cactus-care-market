@@ -16,7 +16,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 function CareBadge({ icon: Icon, label, value }) {
   if (!value) return null;
   return (
-    <div className="flex flex-col items-start p-3 sm:p-4 rounded-2xl bg-gray-50/80">
+    <div className="flex flex-col items-start p-3 sm:p-4 rounded-xl bg-gray-50/80">
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-1.5">
         <Icon className="w-4 h-4 text-gray-400" />
         <span>{label}</span>
@@ -60,14 +60,14 @@ export default function ProductDetailPremium({ product, data, slug }) {
         {/* Left: Asymmetrical Gallery */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4" data-testid="premium-gallery">
           {images.length === 0 && (
-            <div className="col-span-2 aspect-[3/4] bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
+            <div className="col-span-2 aspect-[3/4] bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
               Görsel Yok
             </div>
           )}
           {images.map((img, i) => {
             const isFull = i % 3 === 0;
             return (
-              <div key={i} className={`relative rounded-2xl overflow-hidden bg-[#F8F8F8] group ${isFull ? 'col-span-2' : 'col-span-1'}`}>
+              <div key={i} className={`relative rounded-xl overflow-hidden bg-[#F8F8F8] group ${isFull ? 'col-span-2' : 'col-span-1'}`}>
                 {i === 0 && (
                   <button 
                     onClick={onHeart} 
@@ -131,7 +131,7 @@ export default function ProductDetailPremium({ product, data, slug }) {
           </p>
 
           {product.species_slug && (
-            <Link to={`/tur/${product.species_slug}`} className="mt-6 flex items-center justify-between p-4 bg-emerald-50/80 border border-emerald-100 rounded-2xl hover:bg-emerald-50 transition-colors group">
+            <Link to={`/tur/${product.species_slug}`} className="mt-6 flex items-center justify-between p-4 bg-emerald-50/80 border border-emerald-100 rounded-xl hover:bg-emerald-50 transition-colors group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white text-emerald-600 flex items-center justify-center shrink-0 shadow-sm">
                   <Leaf className="w-5 h-5" />

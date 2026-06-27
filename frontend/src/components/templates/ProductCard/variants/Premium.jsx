@@ -41,7 +41,7 @@ export default function ProductCardPremium({ product, imageRatio = '4:5' }) {
       {/* Image Container */}
       <Link 
         to={`/u/${product.slug}`} 
-        className="block relative w-full rounded-2xl overflow-hidden bg-[#F8F8F8] mb-4 transition-[aspect-ratio] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] aspect-[var(--base-ratio)] group-hover:aspect-square" 
+        className="block relative w-full rounded-xl overflow-hidden bg-[#F8F8F8] mb-4 transition-[aspect-ratio] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] aspect-[var(--base-ratio)] group-hover:aspect-square" 
         style={{ '--base-ratio': currentRatio }}
       >
         {img ? (

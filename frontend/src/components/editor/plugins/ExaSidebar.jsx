@@ -142,7 +142,7 @@ export default function ExaSidebar({ onInsert }) {
                 <input
                   type="url"
                   placeholder="https://..."
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                 />
@@ -152,7 +152,7 @@ export default function ExaSidebar({ onInsert }) {
                 <input
                   type="text"
                   placeholder="Sadece belli bir konu..."
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
                 />
@@ -167,7 +167,7 @@ export default function ExaSidebar({ onInsert }) {
                 <input
                   type="text"
                   placeholder="Örn: 2024'ün en iyi SEO araçları"
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
                 />
@@ -175,7 +175,7 @@ export default function ExaSidebar({ onInsert }) {
               <div>
                 <label className="block text-xs font-medium text-slate-700 mb-1">Format</label>
                 <select
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={variant}
                   onChange={e => setVariant(e.target.value)}
                 >
@@ -196,7 +196,7 @@ export default function ExaSidebar({ onInsert }) {
                 <input
                   type="text"
                   placeholder="Örn: AI yazılım araçları tartışması"
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
                 />
@@ -204,7 +204,7 @@ export default function ExaSidebar({ onInsert }) {
               <div>
                 <label className="block text-xs font-medium text-slate-700 mb-1">Platform / Format</label>
                 <select
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={variant}
                   onChange={e => setVariant(e.target.value)}
                 >
@@ -224,7 +224,7 @@ export default function ExaSidebar({ onInsert }) {
                 <input
                   type="text"
                   placeholder="Örn: B2B SaaS CFO'ları için gelir tahmini"
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
                 />
@@ -232,7 +232,7 @@ export default function ExaSidebar({ onInsert }) {
               <div>
                 <label className="block text-xs font-medium text-slate-700 mb-1">Platform</label>
                 <select
-                  className="w-full text-sm border-slate-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full text-sm border-slate-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
                   value={variant}
                   onChange={e => setVariant(e.target.value)}
                 >
@@ -248,14 +248,14 @@ export default function ExaSidebar({ onInsert }) {
           <button
             onClick={handleAction}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2 px-4 rounded-xl transition-colors disabled:opacity-50"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             {loading ? 'İşleniyor...' : 'Ara ve Üret'}
           </button>
 
           {error && (
-            <div className="p-3 bg-red-50 text-red-600 text-xs rounded-md border border-red-100">
+            <div className="p-3 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100">
               {error}
             </div>
           )}
@@ -271,7 +271,7 @@ export default function ExaSidebar({ onInsert }) {
                   <PlusCircle className="w-3 h-3" /> Editöre Ekle
                 </button>
               </div>
-              <div className="bg-white border border-slate-200 rounded-md p-3 text-xs text-slate-800 whitespace-pre-wrap max-h-64 overflow-y-auto font-mono">
+              <div className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 whitespace-pre-wrap max-h-64 overflow-y-auto font-mono">
                 {typeof result.content_tr === 'string' ? result.content_tr : JSON.stringify(result.content_tr, null, 2)}
               </div>
               {result.citations && result.citations.length > 0 && (

@@ -57,7 +57,7 @@ function BundleProductRow({ product, isPrimary, isFree, checked, disabled, onTog
   return (
     <label
       className={[
-        'relative flex items-center gap-4 p-3 rounded-[12px] border transition-all cursor-pointer select-none group',
+        'relative flex items-center gap-4 p-3 rounded-xl border transition-all cursor-pointer select-none group',
         checked ? 'bg-[#F7FBF8] border-primary shadow-sm' : 'bg-white border-[hsl(var(--border))]',
         disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary/50',
       ].join(' ')}
@@ -72,7 +72,7 @@ function BundleProductRow({ product, isPrimary, isFree, checked, disabled, onTog
           data-testid={`bundle-check-${product.id}`}
         />
       </div>
-      <div className="w-16 h-20 shrink-0 rounded-lg overflow-hidden bg-[#F7FBF8] border border-[hsl(var(--border))] group-hover:shadow-sm transition-shadow">
+      <div className="w-16 h-20 shrink-0 rounded-xl overflow-hidden bg-[#F7FBF8] border border-[hsl(var(--border))] group-hover:shadow-sm transition-shadow">
         {img ? (
           <img src={img} alt={product.image_alt || product.name} className="w-full h-full object-cover" loading="lazy" />
         ) : <div className="w-full h-full shimmer" />}

@@ -70,7 +70,7 @@ export function INaturalistGallery({ scientificName }) {
     return () => { isMounted = false; };
   }, [scientificName]);
 
-  if (loading) return <div className="h-48 shimmer rounded-2xl w-full my-8"></div>;
+  if (loading) return <div className="h-48 shimmer rounded-xl w-full my-8"></div>;
   if (photos.length === 0) return null;
 
   return (
@@ -84,7 +84,7 @@ export function INaturalistGallery({ scientificName }) {
           <div 
             key={i} 
             onClick={() => setSelectedPhoto(p)}
-            className="group relative aspect-square rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-slate-50 cursor-pointer"
+            className="group relative aspect-square rounded-xl overflow-hidden shadow-sm border border-slate-100 bg-slate-50 cursor-pointer"
           >
             <img 
               src={p.url} 
@@ -117,7 +117,7 @@ export function INaturalistGallery({ scientificName }) {
             <img 
               src={selectedPhoto.url.replace('medium', 'large')} 
               alt={`${scientificName} büyük boy görsel`}
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             />
             <p className="text-white/70 text-xs mt-4 text-center">

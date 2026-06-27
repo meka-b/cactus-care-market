@@ -33,7 +33,7 @@ export default function DiseasePage() {
       <SiteBreadcrumb items={[{ label: 'Hastalık Merkezi', href: '/hastaliklar' }, { label: disease.name }]} />
       
       <div className="mt-8 flex items-center gap-4 border-b pb-6">
-        <div className="w-16 h-16 bg-orange-100 text-orange-600 flex items-center justify-center rounded-2xl shrink-0">
+        <div className="w-16 h-16 bg-orange-100 text-orange-600 flex items-center justify-center rounded-xl shrink-0">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <div>
@@ -59,7 +59,7 @@ export default function DiseasePage() {
               <List className="w-6 h-6 text-red-500" />
               Belirtiler (Semptomlar)
             </h2>
-            <ul className="space-y-3 mt-4 bg-red-50/50 p-6 rounded-2xl border border-red-100 list-none ml-0">
+            <ul className="space-y-3 mt-4 bg-red-50/50 p-6 rounded-xl border border-red-100 list-none ml-0">
               {disease.symptoms?.map((sym, i) => (
                 <li key={i} className="flex items-start gap-3 m-0">
                   <span className="w-2 h-2 rounded-full bg-red-400 mt-2.5 shrink-0" />
@@ -74,7 +74,7 @@ export default function DiseasePage() {
               <Stethoscope className="w-6 h-6 text-blue-500" />
               Tedavi Yöntemleri
             </h2>
-            <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
+            <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100">
               <p className="m-0 text-slate-800">{disease.treatment}</p>
             </div>
           </section>

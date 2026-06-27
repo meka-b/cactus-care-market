@@ -226,7 +226,7 @@ export default function AdminAIAdd() {
                 
                 {activeTab === 'gallery' && (
                   <div className="space-y-4">
-                    <div className="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-[11px] text-indigo-700 mb-4 leading-relaxed">
+                    <div className="bg-indigo-50/80 p-3 rounded-xl border border-indigo-100 text-[11px] text-indigo-700 mb-4 leading-relaxed">
                       <strong>İpucu:</strong> Ürünün fotoğrafını yükleyip <strong>AI Senkronize</strong> butonuna basarsanız, sistem fotoğrafı analiz eder ve tüm bitki özelliklerini sizin yerinize otomatik doldurur.
                     </div>
                     <label className="block border-2 border-dashed border-indigo-200 hover:border-indigo-500 hover:bg-indigo-50/50 rounded-xl p-6 text-center cursor-pointer transition-colors group">
@@ -238,7 +238,7 @@ export default function AdminAIAdd() {
 
                     <div className="space-y-3 mt-4">
                       {previews.map((preview, idx) => (
-                        <div key={idx} className="relative group border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                        <div key={idx} className="relative group border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                           <img src={preview} alt={`preview ${idx}`} className="w-full h-32 object-cover" />
                           <button 
                             onClick={() => removeFile(idx)} 
@@ -254,7 +254,7 @@ export default function AdminAIAdd() {
                         </div>
                       ))}
                       {previews.length === 0 && (
-                        <div className="text-center py-8 text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
+                        <div className="text-center py-8 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
                           <ImageIcon className="w-8 h-8 mx-auto mb-2 opacity-30" />
                           <p className="text-xs font-medium">Fotoğraf bekleniyor...</p>
                         </div>
@@ -411,7 +411,7 @@ export default function AdminAIAdd() {
              </div>
 
              {/* QUICK CARE TIPS */}
-             <div className="mb-16 bg-indigo-50/50 p-6 sm:p-8 rounded-[20px] border border-indigo-100">
+             <div className="mb-16 bg-indigo-50/50 p-6 sm:p-8 rounded-xl border border-indigo-100">
                <Label className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-widest text-indigo-600 mb-4 ml-1">
                  <Leaf className="w-4 h-4" /> Hızlı Bakım İpuçları (Madde Madde)
                </Label>

@@ -2,7 +2,7 @@ export default {
   ltr: 'ltr',
   rtl: 'rtl',
   paragraph: 'editor-p mb-4 leading-relaxed',
-  quote: 'editor-quote border-l-4 border-emerald-500 pl-4 py-1 italic text-slate-700 bg-emerald-50/50 rounded-r-lg my-4',
+  quote: 'editor-quote border-l-4 border-emerald-500 pl-4 py-1 italic text-slate-700 bg-emerald-50/50 rounded-r-xl my-4',
   heading: {
     h1: 'editor-h1 text-4xl font-bold mt-8 mb-4 font-heading',
     h2: 'editor-h2 text-3xl font-bold mt-8 mb-4 font-heading',

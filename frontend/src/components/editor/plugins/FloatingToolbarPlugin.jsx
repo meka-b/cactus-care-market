@@ -98,7 +98,7 @@ export default function FloatingToolbarPlugin() {
   if (!isText) return null;
 
   return createPortal(
-    <div ref={popupRef} className="absolute z-[200] flex items-center gap-1 p-1 bg-slate-900 text-white rounded-lg shadow-xl opacity-0 transition-opacity pointer-events-auto">
+    <div ref={popupRef} className="absolute z-[200] flex items-center gap-1 p-1 bg-slate-900 text-white rounded-xl shadow-xl opacity-0 transition-opacity pointer-events-auto">
       <div className="flex items-center gap-1 border-r border-slate-700 pr-2">
         <Button variant="ghost" size="icon" className={`h-8 w-8 text-white hover:bg-slate-800 ${isBold ? 'bg-slate-800' : ''}`} onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}>
           <Bold className="w-4 h-4" />

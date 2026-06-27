@@ -60,7 +60,7 @@ export function AdminDesigner() {
           <button 
             onClick={handleSave} 
             disabled={saving} 
-            className="flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors px-6 py-2.5 rounded-lg font-medium text-sm shadow-sm disabled:opacity-50"
+            className="flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors px-6 py-2.5 rounded-xl font-medium text-sm shadow-sm disabled:opacity-50"
           >
             {saving ? <AlertCircle className="w-4 h-4 animate-pulse" /> : <Save className="w-4 h-4" />}
             {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
@@ -92,7 +92,7 @@ export function AdminDesigner() {
                       <select
                         value={localSettings[`${compName}_imageRatio`] || '1:1'}
                         onChange={(e) => handleRatioChange(compName, e.target.value)}
-                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
+                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
                       >
                         <option value="1:1">1:1 (Kare)</option>
                         <option value="3:4">3:4 (Dikey)</option>
@@ -111,7 +111,7 @@ export function AdminDesigner() {
                         max="999"
                         value={localSettings[`${compName}_evonBorderRadius`] ?? 999}
                         onChange={(e) => handleSettingChange(compName, 'evonBorderRadius', e.target.value)}
-                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
+                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
                       />
                     </div>
                   )}
@@ -123,7 +123,7 @@ export function AdminDesigner() {
                       <select
                         value={localSettings[`${compName}_marqueeEnabled`] !== false ? "true" : "false"}
                         onChange={(e) => handleSettingChange(compName, 'marqueeEnabled', e.target.value === "true")}
-                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
+                        className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none"
                       >
                         <option value="true">Aktif</option>
                         <option value="false">Pasif</option>
@@ -137,7 +137,7 @@ export function AdminDesigner() {
                     <select
                       value={activeVariantName}
                       onChange={(e) => handleVariantChange(compName, e.target.value)}
-                      className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none font-medium"
+                      className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5 outline-none font-medium"
                     >
                       {availableVariants.map(variant => (
                         <option key={variant} value={variant}>

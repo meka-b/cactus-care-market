@@ -26,7 +26,7 @@ export default function PlantIdPage() {
 
         {/* Right Column: Sticky Sidebar */}
         <aside className="lg:sticky lg:top-24 space-y-6">
-          <Card className="p-6 bg-slate-50 border-slate-100 shadow-sm rounded-2xl">
+          <Card className="p-6 bg-slate-50 border-slate-100 shadow-sm rounded-xl">
             <h3 className="font-heading font-semibold text-lg flex items-center gap-2 mb-4">
               <ShieldAlert className="w-5 h-5 text-red-500" />
               Yaygın Hastalıklar
@@ -39,7 +39,7 @@ export default function PlantIdPage() {
             </Link>
           </Card>
           
-          <Card className="p-6 bg-emerald-50/50 border-emerald-100 shadow-sm rounded-2xl">
+          <Card className="p-6 bg-emerald-50/50 border-emerald-100 shadow-sm rounded-xl">
             <h3 className="font-heading font-semibold text-lg flex items-center gap-2 mb-4">
               <BookOpen className="w-5 h-5 text-emerald-600" />
               Bakım Sırları
