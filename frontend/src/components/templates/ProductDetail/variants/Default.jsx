@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { resolveImageUrl } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,25 @@ import { toast } from 'sonner';
 export default function ProductDetailDefault({ product, data, slug }) {
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState('desc');
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const mainButtonRef = useRef(null);
   const { add } = useCart();
+
+  useEffect(() => {
+    if (!mainButtonRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // If main button is NOT intersecting (visible), show the floating button
+        setShowFloatingButton(!entries[0].isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(mainButtonRef.current);
+
+    return () => observer.disconnect();
+  }, [product]);
 
   if (!product) return null;
 
@@ -75,7 +93,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
             <div className="text-4xl font-semibold text-foreground" data-testid="product-price">₺{(product.price || 0).toFixed(2)}</div>
             {product.stock > 0 ? <Badge className="bg-green-50 text-green-700 border border-green-200">Stokta</Badge> : <Badge variant="outline">Tükendi</Badge>}
           </div>
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mt-5 flex items-center gap-3" ref={mainButtonRef}>
             <div className="inline-flex items-center border border-[hsl(var(--border))] rounded-xl">
               <Button size="icon" variant="ghost" onClick={() => setQty(q => Math.max(1, q-1))} data-testid="product-qty-minus"><Minus className="w-4 h-4" /></Button>
               <span className="w-10 text-center" data-testid="product-qty">{qty}</span>
@@ -210,14 +228,21 @@ export default function ProductDetailDefault({ product, data, slug }) {
         </section>
       )}
 
-      <div className="md:hidden fixed bottom-14 left-0 right-0 bg-white border-t border-[hsl(var(--border))] p-3 z-30">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <div className="text-xs text-muted-foreground">Toplam</div>
-            <div className="text-lg font-semibold">₺{((product.price || 0) * qty).toFixed(2)}</div>
-          </div>
-          <Button size="lg" onClick={(e) => { e.currentTarget.blur(); onAdd(); }} className="bg-primary text-white hover:bg-emerald-600" data-testid="product-sticky-add-to-cart"><ShoppingCart className="w-4 h-4 mr-2" />Sepete</Button>
-        </div>
+      {/* Mobile Floating Top Add to Cart */}
+      <div
+        className={`md:hidden fixed top-[72px] left-1/2 -translate-x-1/2 z-40 transition-all duration-[250ms] ease-out pointer-events-none ${showFloatingButton ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 invisible'}`}
+      >
+        <button
+          onClick={(e) => { e.currentTarget.blur(); onAdd(); }}
+          disabled={product.stock <= 0}
+          className="flex items-center gap-2 h-12 px-5 bg-primary/90 backdrop-blur-md text-white rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.3)] border border-primary/20 transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+          data-testid="product-floating-add-to-cart"
+        >
+          <ShoppingCart className="w-5 h-5" />
+          <span className="font-semibold text-[15px] whitespace-nowrap">
+            {product.stock > 0 ? 'Sepete Ekle' : 'Tükendi'}
+          </span>
+        </button>
       </div>
     </div>
   );
