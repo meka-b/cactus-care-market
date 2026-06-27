@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { resolveImageUrl } from '@/lib/api';
 import { CareBento } from '@/components/CareBento';
@@ -28,10 +28,27 @@ function CareBadge({ icon: Icon, label, value }) {
 
 export default function ProductDetailPremium({ product, data, slug }) {
   const [qty, setQty] = useState(1);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const mainButtonRef = useRef(null);
   const { add } = useCart();
   const { isIn, toggle } = useWishlist();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!mainButtonRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setShowFloatingButton(!entries[0].isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(mainButtonRef.current);
+
+    return () => observer.disconnect();
+  }, [product]);
 
   if (!product) return null;
 
@@ -146,7 +163,7 @@ export default function ProductDetailPremium({ product, data, slug }) {
           )}
 
           {/* Purchase Actions */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
+          <div className="mt-8 flex flex-col sm:flex-row items-center gap-3" ref={mainButtonRef}>
             <div className="flex w-full sm:w-auto items-center border border-gray-200 rounded-xl bg-white shrink-0">
               <button 
                 onClick={() => setQty(q => Math.max(1, q-1))} 
@@ -241,17 +258,19 @@ export default function ProductDetailPremium({ product, data, slug }) {
         </div>
       </div>
 
-      {/* Mobile Sticky Add to Cart (Appears when scrolling past original button) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-0.5">Toplam</div>
-            <div className="text-lg font-medium text-gray-900">₺{((product.price || 0) * qty).toFixed(2)}</div>
-          </div>
-          <button onClick={onAdd} disabled={product.stock <= 0} className="px-8 h-12 bg-black text-white rounded-xl font-medium transition-colors hover:bg-gray-800 disabled:opacity-50">
-            Sepete Ekle
-          </button>
-        </div>
+      {/* Mobile Floating Top Add to Cart */}
+      <div
+        className={`lg:hidden fixed top-[72px] left-1/2 -translate-x-1/2 z-40 transition-all duration-[250ms] ease-out pointer-events-none ${showFloatingButton ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 invisible'}`}
+      >
+        <button
+          onClick={onAdd}
+          disabled={product.stock <= 0}
+          className="flex items-center gap-2 h-12 px-6 bg-black/90 backdrop-blur-md text-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.2)] border border-white/10 transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+        >
+          <span className="font-medium text-[15px] whitespace-nowrap">
+            {product.stock > 0 ? 'Sepete Ekle' : 'Tükendi'}
+          </span>
+        </button>
       </div>
 
     </div>
