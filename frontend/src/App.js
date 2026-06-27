@@ -54,7 +54,10 @@ import { TemplateProvider } from '@/contexts/TemplateContext';
 function GATracker() {
   const location = useLocation();
   useEffect(() => { initGA(); }, []);
-  useEffect(() => { trackPageView(location.pathname + location.search); }, [location]);
+  useEffect(() => { 
+    trackPageView(location.pathname + location.search); 
+    window.scrollTo(0, 0);
+  }, [location]);
   return null;
 }
 
