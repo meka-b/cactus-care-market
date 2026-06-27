@@ -16,7 +16,7 @@ module.exports = {
         xl: '12px',
         '2xl': '12px',
         '3xl': '12px',
-        full: '9999px',
+        full: '12px',
       },
       colors: {
         background: 'hsl(var(--background))',
