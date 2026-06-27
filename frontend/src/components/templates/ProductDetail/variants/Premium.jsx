@@ -163,7 +163,7 @@ export default function ProductDetailPremium({ product, data, slug }) {
               </button>
             </div>
             <button 
-              onClick={onAdd} 
+              onClick={(e) => { e.currentTarget.blur(); onAdd(); }} 
               disabled={product.stock <= 0}
               className="flex-1 w-full h-14 bg-black text-white rounded-xl font-medium text-base transition-all hover:bg-gray-800 active:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -248,7 +248,7 @@ export default function ProductDetailPremium({ product, data, slug }) {
             <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-0.5">Toplam</div>
             <div className="text-lg font-medium text-gray-900">₺{((product.price || 0) * qty).toFixed(2)}</div>
           </div>
-          <button onClick={onAdd} disabled={product.stock <= 0} className="px-8 h-12 bg-black text-white rounded-xl font-medium transition-colors hover:bg-gray-800 disabled:opacity-50">
+          <button onClick={(e) => { e.currentTarget.blur(); onAdd(); }} disabled={product.stock <= 0} className="px-8 h-12 bg-black text-white rounded-xl font-medium transition-colors hover:bg-gray-800 disabled:opacity-50">
             Sepete Ekle
           </button>
         </div>

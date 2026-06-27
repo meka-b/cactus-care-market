@@ -81,7 +81,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
               <span className="w-10 text-center" data-testid="product-qty">{qty}</span>
               <Button size="icon" variant="ghost" onClick={() => setQty(q => q+1)} data-testid="product-qty-plus"><Plus className="w-4 h-4" /></Button>
             </div>
-            <Button size="lg" onClick={onAdd} disabled={product.stock <= 0} className="flex-1 bg-primary text-white hover:bg-emerald-600 h-11" data-testid="product-add-to-cart-button"><ShoppingCart className="w-4 h-4 mr-2" />Sepete Ekle</Button>
+            <Button size="lg" onClick={(e) => { e.currentTarget.blur(); onAdd(); }} disabled={product.stock <= 0} className="flex-1 bg-primary text-white hover:bg-emerald-600 h-11" data-testid="product-add-to-cart-button"><ShoppingCart className="w-4 h-4 mr-2" />Sepete Ekle</Button>
           </div>
           <div className="mt-5 grid grid-cols-2 gap-2 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground"><Truck className="w-4 h-4 text-primary" />500 TL üstü ücretsiz kargo</div>
@@ -216,7 +216,7 @@ export default function ProductDetailDefault({ product, data, slug }) {
             <div className="text-xs text-muted-foreground">Toplam</div>
             <div className="text-lg font-semibold">₺{((product.price || 0) * qty).toFixed(2)}</div>
           </div>
-          <Button size="lg" onClick={onAdd} className="bg-primary text-white hover:bg-emerald-600" data-testid="product-sticky-add-to-cart"><ShoppingCart className="w-4 h-4 mr-2" />Sepete</Button>
+          <Button size="lg" onClick={(e) => { e.currentTarget.blur(); onAdd(); }} className="bg-primary text-white hover:bg-emerald-600" data-testid="product-sticky-add-to-cart"><ShoppingCart className="w-4 h-4 mr-2" />Sepete</Button>
         </div>
       </div>
     </div>

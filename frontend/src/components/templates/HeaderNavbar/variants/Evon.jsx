@@ -117,7 +117,7 @@ export default function HeaderNavbarEvon({
               <Link to="/giris"><Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-100 text-gray-700 h-9 w-9"><User className="h-4 w-4" /></Button></Link>
             )}
 
-            <Button variant="ghost" size="icon" onClick={() => setOpenCart(true)} className="relative rounded-full hover:bg-gray-100 text-gray-700 h-9 w-9 ml-1">
+            <Button variant="ghost" size="icon" onClick={(e) => { e.currentTarget.blur(); setOpenCart(true); }} className="relative rounded-full hover:bg-gray-100 text-gray-700 h-9 w-9 ml-1">
               <ShoppingCart className="h-4 w-4" />
               {cartCount > 0 && (
                 <Badge className="absolute -top-1 -right-1 h-4 min-w-4 px-1 bg-[#1A1A1A] text-white border-0 rounded-full text-[9px] flex items-center justify-center font-bold">
