@@ -26,12 +26,12 @@ export function SpeciesCollection() {
         </div>
         
         <div className="overflow-hidden cursor-grab active:cursor-grabbing pb-4 -mx-4 px-4 sm:mx-0 sm:px-0" ref={emblaRef}>
-          <div className="flex gap-3 sm:gap-4">
+          <div className="flex">
             {SPECIES.map(species => (
               <Link 
                 key={species}
                 to={`/koleksiyon/${species}`}
-                className="group flex items-center gap-3 p-1.5 pr-5 bg-[#F7FBF8] border border-[hsl(var(--border))] rounded-full hover:border-primary hover:shadow-sm transition-all flex-none"
+                className="mr-3 sm:mr-4 group flex items-center gap-3 p-1.5 pr-5 bg-[#F7FBF8] border border-[hsl(var(--border))] rounded-xl hover:border-primary hover:shadow-sm transition-all flex-none"
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 bg-white shadow-sm border border-[hsl(var(--border))]">
                   <img 
