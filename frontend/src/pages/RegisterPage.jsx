@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Leaf } from 'lucide-react';
+import { Leaf, Loader2 } from 'lucide-react';
 import { useSEO } from '@/lib/seo';
 
 export default function RegisterPage() {
@@ -55,7 +55,9 @@ export default function RegisterPage() {
               <Label htmlFor="password">Şifre (en az 6 karakter)</Label>
               <Input id="password" type="password" minLength={6} value={password} onChange={e => setPassword(e.target.value)} required data-testid="auth-password-input" />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-primary text-white hover:bg-emerald-600 h-11" data-testid="auth-submit-button">{loading ? 'Kayıt...' : 'Kayıt Ol'}</Button>
+            <Button type="submit" disabled={loading} className="w-full bg-primary text-white hover:bg-emerald-600 h-11" data-testid="auth-submit-button">
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Kayıt...</> : 'Kayıt Ol'}
+            </Button>
           </form>
           <div className="mt-4 text-sm text-center text-muted-foreground">
             Zaten hesabın var mı? <Link to="/giris" className="text-primary font-medium" data-testid="goto-login-link">Giriş yap</Link>

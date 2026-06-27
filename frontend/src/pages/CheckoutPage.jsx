@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { ShoppingBag, ArrowRight, Loader2 } from 'lucide-react';
 import { useSEO } from '@/lib/seo';
 
 export default function CheckoutPage() {
@@ -215,7 +215,7 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <Button type="submit" disabled={loading} className="w-full bg-primary text-white hover:bg-emerald-600 h-11 mt-5" data-testid="checkout-pay-button">
-                  {loading ? 'Ödeme hazırlanıyor...' : <>Ödemeye Geç <ArrowRight className="w-4 h-4 ml-2" /></>}
+                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Ödeme hazırlanıyor...</> : <>Ödemeye Geç <ArrowRight className="w-4 h-4 ml-2" /></>}
                 </Button>
                 <p className="text-xs text-muted-foreground mt-3 text-center">Güvenli ödeme İyzico ile</p>
               </>
