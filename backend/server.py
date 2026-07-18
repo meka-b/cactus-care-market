@@ -2115,7 +2115,8 @@ async def startup_seed():
         admin_email = "admin@yesildukkan.com"
         res = await session.execute(select(DBUser).where(DBUser.email == admin_email))
         if not res.scalars().first():
-            u = DBUser(email=admin_email, name="Admin", role="admin", password_hash=hash_password("Admin1234!"))
+            admin_password = os.environ.get("INITIAL_ADMIN_PASSWORD", "Admin1234!")
+            u = DBUser(email=admin_email, name="Admin", role="admin", password_hash=hash_password(admin_password))
             session.add(u)
             logger.info("Seeded admin user")
             
@@ -2123,7 +2124,8 @@ async def startup_seed():
         demo_email = "demo@yesildukkan.com"
         res = await session.execute(select(DBUser).where(DBUser.email == demo_email))
         if not res.scalars().first():
-            u = DBUser(email=demo_email, name="Demo", role="customer", password_hash=hash_password("Demo1234!"))
+            demo_password = os.environ.get("INITIAL_DEMO_PASSWORD", "Demo1234!")
+            u = DBUser(email=demo_email, name="Demo", role="customer", password_hash=hash_password(demo_password))
             session.add(u)
             logger.info("Seeded demo user")
             
