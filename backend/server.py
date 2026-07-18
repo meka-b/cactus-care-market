@@ -2,7 +2,6 @@
 import os
 import logging
 import json
-import re
 import copy
 from pathlib import Path
 from datetime import datetime, timezone
