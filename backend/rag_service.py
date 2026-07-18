@@ -1,5 +1,5 @@
 import numpy as np
-import requests
+import httpx
 import logging
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -101,10 +101,11 @@ async def get_embedding(text: str, db) -> list[float]:
         "model": MISTRAL_EMBED_MODEL,
         "input": [text]
     }
-    r = requests.post(MISTRAL_EMBED_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    data = r.json()
-    return data["data"][0]["embedding"]
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_EMBED_URL, headers=headers, json=payload, timeout=60)
+        r.raise_for_status()
+        data = r.json()
+        return data["data"][0]["embedding"]
 
 
 async def get_embeddings_batch(texts: list[str], db) -> list[list[float]]:
@@ -118,10 +119,11 @@ async def get_embeddings_batch(texts: list[str], db) -> list[list[float]]:
         "model": MISTRAL_EMBED_MODEL,
         "input": texts
     }
-    r = requests.post(MISTRAL_EMBED_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    data = r.json()
-    return [item["embedding"] for item in data["data"]]
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_EMBED_URL, headers=headers, json=payload, timeout=60)
+        r.raise_for_status()
+        data = r.json()
+        return [item["embedding"] for item in data["data"]]
 
 
 from sqlalchemy import delete
