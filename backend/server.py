@@ -312,14 +312,15 @@ DİKKAT:
 - Bilgi bankasındaki veriler İNGİLİZCE olabilir. Sen bu bilgileri kavrayıp HER ZAMAN KESİNLİKLE TÜRKÇE, akıcı ve doğal bir dil ile içerik üreteceksin.
 - KENDİ YORUMUNU KATMA: Sadece sana verilen bilgi bankasındaki gerçeklere (RAG verilerine) BİREBİR sadık kal. Ekstra hikaye, abartı veya kendi uydurduğun bilgileri kesinlikle ekleme. Nesnel ol.
 - SADECE üretilen Türkçe metni ver, başka bir şey yazma (İngilizce kelime veya alıntı bırakma)."""
-    import requests
+    import httpx
     headers = {"Authorization": f"Bearer {keys['mistral']}", "Content-Type": "application/json"}
     payload = {
         "model": "mistral-large-latest",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.1
     }
-    r = requests.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60)
+    async with httpx.AsyncClient() as client:
+        r = await client.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60)
     r.raise_for_status()
     body = r.json()
     return {"content": body["choices"][0]["message"]["content"]}
