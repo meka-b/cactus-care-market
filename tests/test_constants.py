@@ -1,8 +1,25 @@
 import pytest
-from backend.constants import compute_tags_from_taxonomy
+from taxonomy_helpers import compute_tags_from_taxonomy
+
+
+mock_taxonomy = {
+    "product_categories": [
+        {"name": "Kaktüsler", "slug": "kaktusler"},
+        {"name": "Sukulentler", "slug": "sukulentler"},
+    ],
+    "filters": [
+        {"type": "care_level", "name": "Kolay Bakım", "slug": "kolay-bakim-bitkileri"},
+        {"type": "light_need", "name": "Tam Güneş", "slug": "tam-gunes-seven-bitkiler"},
+        {"type": "light_need", "name": "Yarı Gölge", "slug": "yari-golge-bitkileri"},
+        {"type": "water_need", "name": "Az", "slug": "az-sulanan-bitkiler"},
+        {"type": "water_need", "name": "Orta", "slug": "orta-sulanan-bitkiler"},
+        {"type": "size", "name": "Mini (0-20 cm)", "slug": "mini-bitkiler"},
+        {"type": "pet_safe", "name": "Evcil Hayvan Dostu", "slug": "pet-friendly-bitkiler"}
+    ]
+}
 
 def test_compute_tags_all_match():
-    tags = compute_tags_from_taxonomy(
+    tags = compute_tags_from_taxonomy(mock_taxonomy,
         category="Kaktüsler",
         care="Kolay Bakım",
         light="Tam Güneş",
@@ -20,7 +37,7 @@ def test_compute_tags_all_match():
     ]
 
 def test_compute_tags_no_match():
-    tags = compute_tags_from_taxonomy(
+    tags = compute_tags_from_taxonomy(mock_taxonomy,
         category="Invalid",
         care="Invalid",
         light="Invalid",
@@ -31,7 +48,7 @@ def test_compute_tags_no_match():
     assert tags == []
 
 def test_compute_tags_partial_match():
-    tags = compute_tags_from_taxonomy(
+    tags = compute_tags_from_taxonomy(mock_taxonomy,
         category="Sukulentler",
         care="Invalid",
         light="Yarı Gölge",
@@ -46,7 +63,7 @@ def test_compute_tags_partial_match():
     ]
 
 def test_compute_tags_empty_strings():
-    tags = compute_tags_from_taxonomy(
+    tags = compute_tags_from_taxonomy(mock_taxonomy,
         category="",
         care="",
         light="",
