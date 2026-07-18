@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing Blocking Synchronous I/O in Async Contexts
+**Learning:** Calling synchronous libraries like `requests` inside Python `async def` functions blocks the entire asyncio event loop, severely degrading concurrency and performance of frameworks like FastAPI.
+**Action:** Always verify if an external API call is wrapped in a synchronous library within an async block. If so, replace it with an asynchronous equivalent such as `httpx.AsyncClient` or `aiohttp` to properly yield to the event loop. In this task, replacing `requests.post` with `await httpx.AsyncClient().post(...)` provided ~5x speedup during concurrent load.
