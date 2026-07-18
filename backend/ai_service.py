@@ -5,6 +5,7 @@ import json
 import re
 import logging
 import requests
+import httpx
 from typing import Dict, Optional
 from taxonomy_helpers import compute_tags_from_taxonomy, get_taxonomy_names
 
@@ -190,10 +191,10 @@ KURALLAR: SADECE JSON. Kategori ve bakım seviyeleri kesinlikle yukarıdaki list
         "response_format": {"type": "json_object"},
     }
     
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
-    r.raise_for_status()
-    
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     ai = json.loads(cleaned)
@@ -254,9 +255,10 @@ SADECE JSON."""
         "max_tokens": 1200,
         "response_format": {"type": "json_object"},
     }
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     return json.loads(cleaned)
@@ -326,9 +328,10 @@ KURALLAR:
         "temperature": 0.6,
         "max_tokens": 600,
     }
-    r = requests.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60)
+        r.raise_for_status()
+        body = r.json()
     reply_content = body["choices"][0]["message"]["content"].strip()
     return {"reply": reply_content, "suggestions": [], "sources": rag_results}
 
@@ -385,9 +388,10 @@ KURALLAR:
         "max_tokens": 1000,
         "response_format": {"type": "json_object"},
     }
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     return json.loads(cleaned)
