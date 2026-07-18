@@ -5,6 +5,7 @@ import { MessageCircle, X, Send, Sparkles, Leaf, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuth } from '@/lib/auth';
+import DOMPurify from 'dompurify';
 
 const STORAGE_KEY = 'yd_yaver_history';
 const GREETING = { role: 'assistant', content: 'Merhaba! Ben Yaver 🌿 Bitki bakımı, ürünler veya siparişlerinle ilgili ne sormak istersin?' };
@@ -70,7 +71,7 @@ export function YaverChat() {
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/\n/g, '<br/>');
-    return html;
+    return DOMPurify.sanitize(html);
   };
 
   return (
