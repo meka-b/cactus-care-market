@@ -1639,7 +1639,7 @@ async def admin_add_product_image(product_id: str, file: UploadFile = File(...),
     alt_text = f"{name} - Ürün Görseli {len(existing) + 1}"
     if generate_alt:
         try:
-            ai = ai_service.generate_taxonomy_with_mistral_sync(
+            ai = await ai_service.generate_taxonomy_with_mistral_async(
                 contents,
                 {"scientific_name": cur.scientific_name, "common_names": [name], "family": "", "score": 0},
                 (await ai_service._keys(db))["mistral"],
