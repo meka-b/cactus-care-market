@@ -5,6 +5,22 @@ import requests
 from typing import Dict, Any, List
 from ai_service import _keys, MISTRAL_URL
 
+def _process_exa_result(result: Any, mistral_key: str, context_hint: str) -> Dict[str, Any]:
+    raw_json = json.dumps(result.output.content, ensure_ascii=False)
+    translated_json_str = _translate_to_turkish(raw_json, mistral_key, context_hint=context_hint)
+
+    try:
+        translated_content = json.loads(translated_json_str)
+    except Exception:
+        translated_content = {"raw": translated_json_str}
+
+    citations = [{"title": getattr(g, 'title', None), "url": getattr(g, 'url', None)} for g in getattr(result.output, "grounding", [])]
+
+    return {
+        "content_tr": translated_content,
+        "citations": citations
+    }
+
 def _translate_to_turkish(text: str, mistral_key: str, context_hint: str = "") -> str:
     """Translate and rewrite the text into professional, SEO-friendly Turkish using Mistral."""
     if not mistral_key:
@@ -132,20 +148,7 @@ async def generate_page_tr(topic: str, variant: str, db) -> Dict[str, Any]:
         contents={"highlights": True}
     )
     
-    raw_json = json.dumps(result.output.content, ensure_ascii=False)
-    translated_json_str = _translate_to_turkish(raw_json, keys["mistral"], context_hint="JSON: Programmatic SEO Page Content")
-    
-    try:
-        translated_content = json.loads(translated_json_str)
-    except Exception:
-        translated_content = {"raw": translated_json_str}
-        
-    citations = [{"title": getattr(g, 'title', None), "url": getattr(g, 'url', None)} for g in getattr(result.output, "grounding", [])]
-    
-    return {
-        "content_tr": translated_content,
-        "citations": citations
-    }
+    return _process_exa_result(result, keys["mistral"], "JSON: Programmatic SEO Page Content")
 
 async def generate_social_tr(topic: str, variant: str, db) -> Dict[str, Any]:
     keys = await _keys(db)
@@ -182,20 +185,7 @@ async def generate_social_tr(topic: str, variant: str, db) -> Dict[str, Any]:
         contents={"highlights": True}
     )
     
-    raw_json = json.dumps(result.output.content, ensure_ascii=False)
-    translated_json_str = _translate_to_turkish(raw_json, keys["mistral"], context_hint="JSON: Social Media Post")
-    
-    try:
-        translated_content = json.loads(translated_json_str)
-    except Exception:
-        translated_content = {"raw": translated_json_str}
-        
-    citations = [{"title": getattr(g, 'title', None), "url": getattr(g, 'url', None)} for g in getattr(result.output, "grounding", [])]
-
-    return {
-        "content_tr": translated_content,
-        "citations": citations
-    }
+    return _process_exa_result(result, keys["mistral"], "JSON: Social Media Post")
 
 async def generate_ad_tr(topic: str, variant: str, db) -> Dict[str, Any]:
     keys = await _keys(db)
@@ -247,17 +237,4 @@ async def generate_ad_tr(topic: str, variant: str, db) -> Dict[str, Any]:
         contents={"highlights": True}
     )
     
-    raw_json = json.dumps(result.output.content, ensure_ascii=False)
-    translated_json_str = _translate_to_turkish(raw_json, keys["mistral"], context_hint="JSON: Ad Copy")
-    
-    try:
-        translated_content = json.loads(translated_json_str)
-    except Exception:
-        translated_content = {"raw": translated_json_str}
-        
-    citations = [{"title": getattr(g, 'title', None), "url": getattr(g, 'url', None)} for g in getattr(result.output, "grounding", [])]
-
-    return {
-        "content_tr": translated_content,
-        "citations": citations
-    }
+    return _process_exa_result(result, keys["mistral"], "JSON: Ad Copy")
