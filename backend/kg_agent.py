@@ -163,21 +163,34 @@ Web Verileri:
         
     # Create Diseases
     disease_slugs = []
-    for d in tr_data.get("diseases", []):
-        d_name = d.get("name", "Bilinmeyen Hastalık")
-        d_slug = slugify(d_name)
-        res = await db.execute(select(DBDisease).where(DBDisease.slug == d_slug))
-        disease_obj = res.scalars().first()
-        if not disease_obj:
-            disease_obj = DBDisease(
-                slug=d_slug,
-                name=d_name,
-                description=d.get("treatment", ""),
-                symptoms=d.get("symptoms", []),
-                treatment=d.get("treatment", "")
-            )
-            db.add(disease_obj)
-        disease_slugs.append(d_slug)
+    diseases_data = tr_data.get("diseases", [])
+
+    if diseases_data:
+        # Gather required slugs
+        required_slugs = []
+        for d in diseases_data:
+            d_name = d.get("name", "Bilinmeyen Hastalık")
+            required_slugs.append(slugify(d_name))
+
+        # Fetch existing in one query
+        existing_diseases = {}
+        res = await db.execute(select(DBDisease).where(DBDisease.slug.in_(required_slugs)))
+        existing_diseases = {d.slug: d for d in res.scalars().all()}
+
+        # Process loop
+        for d, d_slug in zip(diseases_data, required_slugs):
+            disease_obj = existing_diseases.get(d_slug)
+            if not disease_obj:
+                disease_obj = DBDisease(
+                    slug=d_slug,
+                    name=d.get("name", "Bilinmeyen Hastalık"),
+                    description=d.get("treatment", ""),
+                    symptoms=d.get("symptoms", []),
+                    treatment=d.get("treatment", "")
+                )
+                db.add(disease_obj)
+                existing_diseases[d_slug] = disease_obj
+            disease_slugs.append(d_slug)
 
     # Create Species
     new_species = DBSpecies(
