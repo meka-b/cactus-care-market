@@ -192,31 +192,46 @@ async def admin_rag_sync(user=Depends(require_admin), db: AsyncSession = Depends
                     await rag_service.ingest_document(title, source_type, content, session)
                     await session.commit()
 
-        # 2. Fetch all products
-        products = await db.execute(select(DBProduct))
-        product_tasks = []
-        for p in products.scalars().all():
-            content = f"# Ürün: {p.common_name_tr}\n"
-            content += f"Fiyat: {p.price} TL\nKategori: {p.category}\n"
-            content += f"Bakım Zorluğu: {p.care_level}\nIşık İhtiyacı: {p.light_need}\nSu İhtiyacı: {p.water_need}\nEvcil Hayvan Dostu: {'Evet' if p.pet_safe else 'Hayır'}\n"
-            content += f"Kısa Açıklama: {p.short_description or ''}\nDetaylı Açıklama: {p.description or ''}\n"
+        # 2. Fetch all products in batches
+        product_count = 0
+        limit = 100
+        offset = 0
+        while True:
+            products_res = await db.execute(select(DBProduct).order_by(DBProduct.id).limit(limit).offset(offset))
+            batch = products_res.scalars().all()
+            if not batch:
+                break
             
-            product_tasks.append(ingest_with_sem(f"Ürün: {p.common_name_tr}", "product", content))
+            product_tasks = []
+            for p in batch:
+                content = f"# Ürün: {p.common_name_tr}\n"
+                content += f"Fiyat: {p.price} TL\nKategori: {p.category}\n"
+                content += f"Bakım Zorluğu: {p.care_level}\nIşık İhtiyacı: {p.light_need}\nSu İhtiyacı: {p.water_need}\nEvcil Hayvan Dostu: {'Evet' if p.pet_safe else 'Hayır'}\n"
+                content += f"Kısa Açıklama: {p.short_description or ''}\nDetaylı Açıklama: {p.description or ''}\n"
+                product_tasks.append(ingest_with_sem(f"Ürün: {p.common_name_tr}", "product", content))
+                product_count += 1
 
-        await asyncio.gather(*product_tasks)
-        product_count = len(product_tasks)
+            await asyncio.gather(*product_tasks)
+            offset += limit
 
-        # 3. Fetch all blogs
-        blogs = await db.execute(select(DBBlogPost).where(DBBlogPost.status == 'published'))
-        blog_tasks = []
-        for b in blogs.scalars().all():
-            content = f"# Blog Makalesi: {b.title}\n"
-            content += f"Özet: {b.excerpt or ''}\n\nİçerik:\n{b.content or ''}"
-            
-            blog_tasks.append(ingest_with_sem(f"Makale: {b.title}", "blog", content))
+        # 3. Fetch all blogs in batches
+        blog_count = 0
+        offset = 0
+        while True:
+            blogs_res = await db.execute(select(DBBlogPost).where(DBBlogPost.status == 'published').order_by(DBBlogPost.id).limit(limit).offset(offset))
+            batch = blogs_res.scalars().all()
+            if not batch:
+                break
 
-        await asyncio.gather(*blog_tasks)
-        blog_count = len(blog_tasks)
+            blog_tasks = []
+            for b in batch:
+                content = f"# Blog Makalesi: {b.title}\n"
+                content += f"Özet: {b.excerpt or ''}\n\nİçerik:\n{b.content or ''}"
+                blog_tasks.append(ingest_with_sem(f"Makale: {b.title}", "blog", content))
+                blog_count += 1
+
+            await asyncio.gather(*blog_tasks)
+            offset += limit
             
         return {"message": f"{product_count} ürün ve {blog_count} makale başarıyla RAG sistemine senkronize edildi."}
     except Exception as e:
