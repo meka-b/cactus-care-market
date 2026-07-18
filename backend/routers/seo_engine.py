@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 import db_models
 import os
-import requests
+import httpx
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -15,6 +15,9 @@ MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 MISTRAL_MODEL = "mistral-large-latest"
 
 router = APIRouter(prefix="/api/seo", tags=["seo"])
+
+# Use a global client to reuse connections
+http_client = httpx.AsyncClient()
 
 class AITextRequest(BaseModel):
     text: str
@@ -68,7 +71,7 @@ async def _call_exa(query: str, db: AsyncSession) -> dict:
     }
     
     try:
-        r = requests.post("https://api.exa.ai/search", json=payload, headers=headers, timeout=30)
+        r = await http_client.post("https://api.exa.ai/search", json=payload, headers=headers, timeout=30.0)
         r.raise_for_status()
         data = r.json()
         return data.get("output", {}).get("content", {"entities": [], "faqs": [], "gaps": []})
@@ -93,7 +96,7 @@ async def _call_mistral(prompt: str, db: AsyncSession) -> str:
     }
     
     try:
-        r = requests.post(MISTRAL_URL, json=payload, headers=headers, timeout=90)
+        r = await http_client.post(MISTRAL_URL, json=payload, headers=headers, timeout=90.0)
         r.raise_for_status()
         data = r.json()
         content = data["choices"][0]["message"]["content"]
@@ -121,7 +124,7 @@ async def _call_mistral_json(prompt: str, db: AsyncSession) -> dict:
     }
     
     try:
-        r = requests.post(MISTRAL_URL, json=payload, headers=headers, timeout=90)
+        r = await http_client.post(MISTRAL_URL, json=payload, headers=headers, timeout=90.0)
         r.raise_for_status()
         data = r.json()
         content = data["choices"][0]["message"]["content"]
