@@ -15,7 +15,7 @@ def get_encryption_key() -> bytes:
         except ValueError:
             pass
 
-    secret = os.environ.get("JWT_SECRET", "dev-secret")
+    secret = os.environ["JWT_SECRET"]
     salt = b"yesil_dukkan_api_key_salt"
 
     kdf = PBKDF2HMAC(
