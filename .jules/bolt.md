@@ -1,0 +1,3 @@
+## 2024-06-25 - Replace blocking requests with httpx in async loops
+**Learning:** When making HTTP requests from within asynchronous FastAPI routes or backend services, use non-blocking clients like `httpx.AsyncClient` instead of synchronous `requests` to prevent blocking the asyncio event loop. For optimal performance, instantiate the async client once (e.g., at application startup) and reuse it to take advantage of underlying connection pools, rather than creating a new client per request.
+**Action:** Always verify if a library being used performs synchronous I/O operations (like `requests`) inside async contexts and replace them with their async equivalents (like `httpx.AsyncClient` or `aiohttp`).
