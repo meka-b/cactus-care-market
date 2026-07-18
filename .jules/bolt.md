@@ -1,0 +1,3 @@
+## 2024-05-19 - HTTPX Async Optimization in FastAPI
+**Learning:** Using `requests` inside async context (like FastAPI endpoints) blocks the event loop, causing severe performance degradation. Replacing it with `httpx.AsyncClient` unblocks the loop. Furthermore, instantiating `httpx.AsyncClient()` globally allows for connection pooling across requests, which is significantly more performant than creating a new client inside each function call.
+**Action:** Always prefer `httpx.AsyncClient` over `requests` in async Python codebases. Instantiate it globally or attach it to the application lifespan for connection pooling.
