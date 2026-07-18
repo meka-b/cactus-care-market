@@ -2,6 +2,7 @@
 Comprehensive backend API tests for Yeşil Dükkan
 Tests all endpoints with proper auth handling
 """
+import os
 import requests
 import sys
 from datetime import datetime
@@ -131,7 +132,7 @@ class YesilDukkanTester:
         # Login admin
         success, data = self.test("Login Admin", "POST", "/auth/login", 200, {
             "email": "admin@yesildukkan.com",
-            "password": "Admin1234!"
+            "password": os.environ.get("INITIAL_ADMIN_PASSWORD", "Admin1234!")
         })
         if success and data.get('token'):
             self.admin_token = data['token']
@@ -140,7 +141,7 @@ class YesilDukkanTester:
         # Login customer
         success, data = self.test("Login Customer", "POST", "/auth/login", 200, {
             "email": "demo@yesildukkan.com",
-            "password": "Demo1234!"
+            "password": os.environ.get("INITIAL_DEMO_PASSWORD", "Demo1234!")
         })
 
         # Test /me endpoint
