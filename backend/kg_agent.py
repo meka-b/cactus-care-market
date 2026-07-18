@@ -7,7 +7,7 @@ from exa_py import Exa
 from database import AsyncSessionLocal
 from db_models import DBProduct, DBTaxonomyFamily, DBTaxonomyGenus, DBSpecies, DBDisease, DBKnowledgeGraphJob
 from ai_service import _keys, MISTRAL_URL
-import requests
+import httpx
 import re
 import unicodedata
 
@@ -125,8 +125,10 @@ Web Verileri:
         "response_format": {"type": "json_object"}
     }
     
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
-    if not r.ok:
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
+
+    if not r.is_success:
         logger.error(f"Mistral translation failed: {r.text}")
         job.status = "failed"
         job.error_message = "Mistral translation failed"
