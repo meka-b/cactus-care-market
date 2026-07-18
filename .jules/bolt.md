@@ -1,0 +1,3 @@
+## 2024-07-18 - Optimize RAG Sync Background Task
+**Learning:** When using `limit` and `offset` for batching or pagination with SQLAlchemy queries, always include an `order_by` clause (e.g., `.order_by(Model.id)`) to ensure deterministic query results and prevent skipped or duplicated records. Also, when processing large datasets asynchronously, avoid accumulating thousands of coroutine objects in a single list for `asyncio.gather()`. Instead, process the data in batches, awaiting `asyncio.gather()` for each chunk sequentially to minimize peak memory usage.
+**Action:** When implementing batching in SQLAlchemy, always append `.order_by()` to the base query. Additionally, process asynchronous task accumulation sequentially in batches rather than submitting all at once.
