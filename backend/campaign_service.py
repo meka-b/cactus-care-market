@@ -10,6 +10,7 @@ Desteklenen tipler:
 - buy_x_get_y:         Primary ürün sepetteyse `free_product_id` ücretsiz eklenir.
 - quantity_break:      Tek ürünün miktarına göre kademeli yüzde indirim.
 """
+
 from __future__ import annotations
 import logging
 from datetime import datetime, timezone
@@ -31,13 +32,21 @@ def is_campaign_live(camp: dict) -> bool:
     ea = camp.get("end_at")
     try:
         if sa:
-            d = datetime.fromisoformat(sa.replace("Z", "+00:00")) if isinstance(sa, str) else sa
+            d = (
+                datetime.fromisoformat(sa.replace("Z", "+00:00"))
+                if isinstance(sa, str)
+                else sa
+            )
             if d.tzinfo is None:
                 d = d.replace(tzinfo=timezone.utc)
             if d > now:
                 return False
         if ea:
-            d = datetime.fromisoformat(ea.replace("Z", "+00:00")) if isinstance(ea, str) else ea
+            d = (
+                datetime.fromisoformat(ea.replace("Z", "+00:00"))
+                if isinstance(ea, str)
+                else ea
+            )
             if d.tzinfo is None:
                 d = d.replace(tzinfo=timezone.utc)
             if d < now:
@@ -61,20 +70,27 @@ async def fetch_campaigns_for_product(db, product_id: str) -> list[dict]:
     from sqlalchemy.future import select
     from db_models import DBCampaign
     from sqlalchemy import or_, cast, String
-    
-    stmt = select(DBCampaign).where(
-        DBCampaign.is_active == True
-    ).order_by(DBCampaign.priority.asc())
-    
+
+    stmt = (
+        select(DBCampaign)
+        .where(DBCampaign.is_active == True)
+        .order_by(DBCampaign.priority.asc())
+    )
+
     result = await db.execute(stmt)
-    items = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in result.scalars().all()]
-    
+    items = [
+        {k: v for k, v in row.__dict__.items() if not k.startswith("_")}
+        for row in result.scalars().all()
+    ]
+
     filtered = []
     for c in items:
-        if c.get("primary_product_id") == product_id or product_id in (c.get("related_product_ids") or []):
+        if c.get("primary_product_id") == product_id or product_id in (
+            c.get("related_product_ids") or []
+        ):
             if is_campaign_live(c):
                 filtered.append(c)
-                
+
     return filtered
 
 
@@ -82,13 +98,19 @@ async def hydrate_campaign_products(db, camp: dict) -> dict:
     """Campaign'in product_id'lerini gerçek product dokümanlarına dönüştürür."""
     from sqlalchemy.future import select
     from db_models import DBProduct
-    
+
     ids = _collect_bundle_product_ids(camp)
     products = {}
     if ids:
-        result = await db.execute(select(DBProduct).where(DBProduct.id.in_(ids), DBProduct.is_published == True))
+        result = await db.execute(
+            select(DBProduct).where(
+                DBProduct.id.in_(ids), DBProduct.is_published == True
+            )
+        )
         for p in result.scalars().all():
-            products[p.id] = {k: v for k, v in p.__dict__.items() if not k.startswith('_')}
+            products[p.id] = {
+                k: v for k, v in p.__dict__.items() if not k.startswith("_")
+            }
 
     def thin(p):
         if not p:
@@ -108,8 +130,16 @@ async def hydrate_campaign_products(db, camp: dict) -> dict:
     enriched = {
         **camp,
         "primary_product": thin(products.get(camp.get("primary_product_id"))),
-        "related_products": [thin(products[pid]) for pid in (camp.get("related_product_ids") or []) if pid in products],
-        "free_product": thin(products.get(camp.get("free_product_id"))) if camp.get("free_product_id") else None,
+        "related_products": [
+            thin(products[pid])
+            for pid in (camp.get("related_product_ids") or [])
+            if pid in products
+        ],
+        "free_product": (
+            thin(products.get(camp.get("free_product_id")))
+            if camp.get("free_product_id")
+            else None
+        ),
         "live": is_campaign_live(camp),
     }
     # Stok özeti
@@ -119,8 +149,122 @@ async def hydrate_campaign_products(db, camp: dict) -> dict:
     parts.extend(enriched["related_products"])
     if enriched["free_product"]:
         parts.append(enriched["free_product"])
-    enriched["any_out_of_stock"] = any(p and not p.get("in_stock") for p in parts) if parts else False
+    enriched["any_out_of_stock"] = (
+        any(p and not p.get("in_stock") for p in parts) if parts else False
+    )
     return enriched
+
+
+def _calc_fixed_bundle(camp: dict, items: list[dict], subtotal: float) -> dict:
+    primary = camp.get("primary_product_id")
+    all_ids = [primary] + list(camp.get("related_product_ids") or [])
+    sel_ids = {i["product_id"] for i in items}
+    if primary not in sel_ids or len(sel_ids) < 2:
+        return {
+            "valid": False,
+            "reason": "Birlikte alım için en az ana ürün + 1 ek ürün seçili olmalı.",
+        }
+    # Yalnızca kampanyaya dahil ürünler kabul
+    for i in items:
+        if i["product_id"] not in all_ids:
+            return {"valid": False, "reason": "Kampanya dışı ürün seçildi."}
+    target = float(camp.get("bundle_price") or 0)
+    discount = max(0, subtotal - target)
+    return {
+        "valid": True,
+        "items": items,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount, 2),
+        "bundle_total": round(max(0, subtotal - discount), 2),
+        "breakdown": f"Birlikte Al: ₺{subtotal:.2f} → ₺{target:.2f}",
+    }
+
+
+def _calc_percentage_bundle(camp: dict, items: list[dict], subtotal: float) -> dict:
+    primary = camp.get("primary_product_id")
+    sel_ids = {i["product_id"] for i in items}
+    if primary not in sel_ids or len(sel_ids) < 2:
+        return {"valid": False, "reason": "En az ana ürün + 1 ek ürün seçili olmalı."}
+    pct = float(camp.get("discount_pct") or 0)
+    discount = subtotal * pct / 100.0
+    return {
+        "valid": True,
+        "items": items,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount, 2),
+        "bundle_total": round(max(0, subtotal - discount), 2),
+        "breakdown": f"%{pct:.0f} bundle indirimi",
+    }
+
+
+def _calc_fixed_amount_bundle(camp: dict, items: list[dict], subtotal: float) -> dict:
+    primary = camp.get("primary_product_id")
+    sel_ids = {i["product_id"] for i in items}
+    if primary not in sel_ids or len(sel_ids) < 2:
+        return {"valid": False, "reason": "En az ana ürün + 1 ek ürün seçili olmalı."}
+    amount = float(camp.get("discount_amount") or 0)
+    discount = min(amount, subtotal)
+    return {
+        "valid": True,
+        "items": items,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount, 2),
+        "bundle_total": round(max(0, subtotal - discount), 2),
+        "breakdown": f"Birlikte alımda -₺{amount:.2f}",
+    }
+
+
+def _calc_buy_x_get_y(camp: dict, items: list[dict], subtotal: float) -> dict:
+    primary = camp.get("primary_product_id")
+    free_id = camp.get("free_product_id")
+    free_qty = int(camp.get("free_qty") or 1)
+    sel_ids = {i["product_id"] for i in items}
+    if primary not in sel_ids or free_id not in sel_ids:
+        return {
+            "valid": False,
+            "reason": "X+Y kampanyası için ana ürün ve ücretsiz ürün her ikisi de seçili olmalı.",
+        }
+    free_item = next(i for i in items if i["product_id"] == free_id)
+    discount = free_item["price"] * min(free_qty, free_item["quantity"])
+    return {
+        "valid": True,
+        "items": items,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount, 2),
+        "bundle_total": round(max(0, subtotal - discount), 2),
+        "breakdown": f"{free_qty} adet ücretsiz",
+    }
+
+
+def _calc_quantity_break(camp: dict, items: list[dict], subtotal: float) -> dict:
+    primary = camp.get("primary_product_id")
+    # Sadece ana ürünü etkiler
+    prim_items = [i for i in items if i["product_id"] == primary]
+    if not prim_items:
+        return {"valid": False, "reason": "Ana ürün seçilmedi."}
+    total_qty = sum(i["quantity"] for i in prim_items)
+    tiers = sorted(
+        [t for t in (camp.get("quantity_tiers") or [])],
+        key=lambda t: t.get("min_qty", 0),
+    )
+    applied_pct = 0.0
+    for t in tiers:
+        if total_qty >= int(t.get("min_qty", 0)):
+            applied_pct = float(t.get("discount_pct", 0))
+    if applied_pct <= 0:
+        return {"valid": False, "reason": "Bu miktarda indirim kademesi yok."}
+    prim_subtotal = sum(i["price"] * i["quantity"] for i in prim_items)
+    discount = prim_subtotal * applied_pct / 100.0
+    return {
+        "valid": True,
+        "items": items,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount, 2),
+        "bundle_total": round(max(0, subtotal - discount), 2),
+        "breakdown": f"{total_qty} adet → %{applied_pct:.0f} indirim",
+        "applied_pct": applied_pct,
+        "qty": total_qty,
+    }
 
 
 def calculate_bundle(camp: dict, selected_products: list[dict]) -> dict:
@@ -128,94 +272,36 @@ def calculate_bundle(camp: dict, selected_products: list[dict]) -> dict:
     Returns: {valid, items, subtotal, discount, bundle_total, breakdown}
     """
     if not is_campaign_live(camp):
-        return {"valid": False, "reason": "Kampanya aktif değil veya tarihi geçti.", "discount": 0, "subtotal": 0, "bundle_total": 0}
+        return {
+            "valid": False,
+            "reason": "Kampanya aktif değil veya tarihi geçti.",
+            "discount": 0,
+            "subtotal": 0,
+            "bundle_total": 0,
+        }
 
     ctype = camp.get("type")
-    items = [{"product_id": p["id"], "price": float(p.get("price", 0)), "quantity": int(p.get("quantity", 1))} for p in selected_products]
+    items = [
+        {
+            "product_id": p["id"],
+            "price": float(p.get("price", 0)),
+            "quantity": int(p.get("quantity", 1)),
+        }
+        for p in selected_products
+    ]
     subtotal = sum(i["price"] * i["quantity"] for i in items)
 
-    if ctype == "fixed_bundle":
-        # Primary + en az bir related seçili olmalı
-        primary = camp.get("primary_product_id")
-        all_ids = [primary] + list(camp.get("related_product_ids") or [])
-        sel_ids = {i["product_id"] for i in items}
-        if primary not in sel_ids or len(sel_ids) < 2:
-            return {"valid": False, "reason": "Birlikte alım için en az ana ürün + 1 ek ürün seçili olmalı."}
-        # Yalnızca kampanyaya dahil ürünler kabul
-        for i in items:
-            if i["product_id"] not in all_ids:
-                return {"valid": False, "reason": "Kampanya dışı ürün seçildi."}
-        target = float(camp.get("bundle_price") or 0)
-        discount = max(0, subtotal - target)
-        return {
-            "valid": True, "items": items, "subtotal": round(subtotal, 2),
-            "discount": round(discount, 2), "bundle_total": round(max(0, subtotal - discount), 2),
-            "breakdown": f"Birlikte Al: ₺{subtotal:.2f} → ₺{target:.2f}",
-        }
+    handlers = {
+        "fixed_bundle": _calc_fixed_bundle,
+        "percentage_bundle": _calc_percentage_bundle,
+        "fixed_amount_bundle": _calc_fixed_amount_bundle,
+        "buy_x_get_y": _calc_buy_x_get_y,
+        "quantity_break": _calc_quantity_break,
+    }
 
-    if ctype == "percentage_bundle":
-        primary = camp.get("primary_product_id")
-        sel_ids = {i["product_id"] for i in items}
-        if primary not in sel_ids or len(sel_ids) < 2:
-            return {"valid": False, "reason": "En az ana ürün + 1 ek ürün seçili olmalı."}
-        pct = float(camp.get("discount_pct") or 0)
-        discount = subtotal * pct / 100.0
-        return {
-            "valid": True, "items": items, "subtotal": round(subtotal, 2),
-            "discount": round(discount, 2), "bundle_total": round(max(0, subtotal - discount), 2),
-            "breakdown": f"%{pct:.0f} bundle indirimi",
-        }
-
-    if ctype == "fixed_amount_bundle":
-        primary = camp.get("primary_product_id")
-        sel_ids = {i["product_id"] for i in items}
-        if primary not in sel_ids or len(sel_ids) < 2:
-            return {"valid": False, "reason": "En az ana ürün + 1 ek ürün seçili olmalı."}
-        amount = float(camp.get("discount_amount") or 0)
-        discount = min(amount, subtotal)
-        return {
-            "valid": True, "items": items, "subtotal": round(subtotal, 2),
-            "discount": round(discount, 2), "bundle_total": round(max(0, subtotal - discount), 2),
-            "breakdown": f"Birlikte alımda -₺{amount:.2f}",
-        }
-
-    if ctype == "buy_x_get_y":
-        primary = camp.get("primary_product_id")
-        free_id = camp.get("free_product_id")
-        free_qty = int(camp.get("free_qty") or 1)
-        sel_ids = {i["product_id"] for i in items}
-        if primary not in sel_ids or free_id not in sel_ids:
-            return {"valid": False, "reason": "X+Y kampanyası için ana ürün ve ücretsiz ürün her ikisi de seçili olmalı."}
-        free_item = next(i for i in items if i["product_id"] == free_id)
-        discount = free_item["price"] * min(free_qty, free_item["quantity"])
-        return {
-            "valid": True, "items": items, "subtotal": round(subtotal, 2),
-            "discount": round(discount, 2), "bundle_total": round(max(0, subtotal - discount), 2),
-            "breakdown": f"{free_qty} adet ücretsiz",
-        }
-
-    if ctype == "quantity_break":
-        primary = camp.get("primary_product_id")
-        # Sadece ana ürünü etkiler
-        prim_items = [i for i in items if i["product_id"] == primary]
-        if not prim_items:
-            return {"valid": False, "reason": "Ana ürün seçilmedi."}
-        total_qty = sum(i["quantity"] for i in prim_items)
-        tiers = sorted([t for t in (camp.get("quantity_tiers") or [])], key=lambda t: t.get("min_qty", 0))
-        applied_pct = 0.0
-        for t in tiers:
-            if total_qty >= int(t.get("min_qty", 0)):
-                applied_pct = float(t.get("discount_pct", 0))
-        if applied_pct <= 0:
-            return {"valid": False, "reason": "Bu miktarda indirim kademesi yok."}
-        prim_subtotal = sum(i["price"] * i["quantity"] for i in prim_items)
-        discount = prim_subtotal * applied_pct / 100.0
-        return {
-            "valid": True, "items": items, "subtotal": round(subtotal, 2),
-            "discount": round(discount, 2), "bundle_total": round(max(0, subtotal - discount), 2),
-            "breakdown": f"{total_qty} adet → %{applied_pct:.0f} indirim",
-            "applied_pct": applied_pct, "qty": total_qty,
-        }
+    handler = handlers.get(ctype)
+    if handler:
+        return handler(camp, items, subtotal)
 
     return {"valid": False, "reason": "Bilinmeyen kampanya tipi."}
 
@@ -238,7 +324,7 @@ async def validate_and_calc_for_cart(db, applied_campaigns: list[dict]) -> dict:
     camps = {}
     c_res = await db.execute(select(DBCampaign).where(DBCampaign.id.in_(camp_ids)))
     for c in c_res.scalars().all():
-        camps[c.id] = {k: v for k, v in c.__dict__.items() if not k.startswith('_')}
+        camps[c.id] = {k: v for k, v in c.__dict__.items() if not k.startswith("_")}
 
     # Ürün fiyatlarını yükle (snapshot)
     product_ids = set()
@@ -246,9 +332,11 @@ async def validate_and_calc_for_cart(db, applied_campaigns: list[dict]) -> dict:
         for it in a.get("items", []):
             product_ids.add(it["product_id"])
     products = {}
-    p_res = await db.execute(select(DBProduct).where(DBProduct.id.in_(list(product_ids))))
+    p_res = await db.execute(
+        select(DBProduct).where(DBProduct.id.in_(list(product_ids)))
+    )
     for p in p_res.scalars().all():
-        products[p.id] = {k: v for k, v in p.__dict__.items() if not k.startswith('_')}
+        products[p.id] = {k: v for k, v in p.__dict__.items() if not k.startswith("_")}
 
     # Öncelik sırasına göre sırala (priority ASC, eşitse created_at)
     ordered = []
@@ -281,22 +369,26 @@ async def validate_and_calc_for_cart(db, applied_campaigns: list[dict]) -> dict:
         selected_products = []
         for it in a.get("items", []):
             prod = products.get(it["product_id"], {})
-            selected_products.append({
-                "id": it["product_id"],
-                "price": float(prod.get("price", 0)),
-                "quantity": int(it.get("quantity", 1)),
-            })
+            selected_products.append(
+                {
+                    "id": it["product_id"],
+                    "price": float(prod.get("price", 0)),
+                    "quantity": int(it.get("quantity", 1)),
+                }
+            )
         res = calculate_bundle(camp, selected_products)
         if not res.get("valid"):
             continue
         total_discount += res.get("discount", 0)
-        breakdown.append({
-            "campaign_id": camp["id"],
-            "name": camp.get("name"),
-            "type": camp.get("type"),
-            "discount": res.get("discount", 0),
-            "breakdown": res.get("breakdown"),
-        })
+        breakdown.append(
+            {
+                "campaign_id": camp["id"],
+                "name": camp.get("name"),
+                "type": camp.get("type"),
+                "discount": res.get("discount", 0),
+                "breakdown": res.get("breakdown"),
+            }
+        )
         applied_ids.append(camp["id"])
         for pid in item_ids:
             used_products.add(pid)
