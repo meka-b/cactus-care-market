@@ -4,7 +4,7 @@ import base64
 import json
 import re
 import logging
-import requests
+import httpx
 from typing import Dict, Optional
 from taxonomy_helpers import compute_tags_from_taxonomy, get_taxonomy_names
 
@@ -33,15 +33,16 @@ async def _keys(db) -> Dict[str, str]:
     }
 
 
-def identify_with_plantnet_sync(image_bytes: bytes, plantnet_key: str, filename: str = "plant.jpg") -> Dict:
+async def identify_with_plantnet_async(image_bytes: bytes, plantnet_key: str, filename: str = "plant.jpg") -> Dict:
     if not plantnet_key:
         raise ValueError("PlantNet API anahtarı tanımlı değil")
     url = f"https://my-api.plantnet.org/v2/identify/all?api-key={plantnet_key}"
-    files = [("images", (filename, image_bytes, "image/jpeg"))]
+    files = {"images": (filename, image_bytes, "image/jpeg")}
     data = {"organs": "auto"}
-    r = requests.post(url, files=files, data=data, timeout=60)
-    r.raise_for_status()
-    data = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(url, files=files, data=data, timeout=60.0)
+        r.raise_for_status()
+        data = r.json()
     results = data.get("results", [])
     if not results:
         return {"scientific_name": None, "common_names": [], "score": 0}
@@ -96,7 +97,7 @@ Bu bitki için (PlantNet: scientific_name="{plantnet.get('scientific_name')}", f
 KURALLAR: SADECE JSON; enum'lar listeden; slug ASCII; kaktüsler dikenli=false; Aloe/Sukulent çoğunlukla true."""
 
 
-def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mistral_key: str, product_name: str = "", taxonomy: dict = None) -> Dict:
+async def generate_taxonomy_with_mistral_async(image_bytes: bytes, plantnet: dict, mistral_key: str, product_name: str = "", taxonomy: dict = None) -> Dict:
     if not mistral_key:
         raise ValueError("Mistral API anahtarı tanımlı değil")
     b64 = base64.b64encode(image_bytes).decode("utf-8")
@@ -115,9 +116,10 @@ def generate_taxonomy_with_mistral_sync(image_bytes: bytes, plantnet: dict, mist
         "max_tokens": 2000,
         "response_format": {"type": "json_object"},
     }
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=120.0)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     ai = json.loads(cleaned)
@@ -190,10 +192,11 @@ KURALLAR: SADECE JSON. Kategori ve bakım seviyeleri kesinlikle yukarıdaki list
         "response_format": {"type": "json_object"},
     }
     
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=120)
-    r.raise_for_status()
-    
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=120.0)
+        r.raise_for_status()
+
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     ai = json.loads(cleaned)
@@ -212,12 +215,12 @@ async def analyze_plant_image(image_bytes: bytes, db, product_name: str = "") ->
     keys = await _keys(db)
     from settings_service import get_taxonomy
     taxonomy = await get_taxonomy(db)
-    plant = identify_with_plantnet_sync(image_bytes, keys["plantnet"])
+    plant = await identify_with_plantnet_async(image_bytes, keys["plantnet"])
     if not plant.get("scientific_name"):
         if not product_name:
             raise ValueError("Bitki tanımlanamadı. Lütfen daha net bir bitki fotoğrafı yükleyin veya ürün adı belirtin.")
         plant = {"scientific_name": product_name, "common_names": [product_name], "family": "", "score": 0}
-    ai = generate_taxonomy_with_mistral_sync(image_bytes, plant, keys["mistral"], product_name, taxonomy)
+    ai = await generate_taxonomy_with_mistral_async(image_bytes, plant, keys["mistral"], product_name, taxonomy)
     ai["plantnet_score"] = plant.get("score", 0)
     ai["common_names"] = plant.get("common_names", [])
     return ai
@@ -254,9 +257,10 @@ SADECE JSON."""
         "max_tokens": 1200,
         "response_format": {"type": "json_object"},
     }
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=60.0)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     return json.loads(cleaned)
@@ -326,9 +330,10 @@ KURALLAR:
         "temperature": 0.6,
         "max_tokens": 600,
     }
-    r = requests.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=payload, timeout=60.0)
+        r.raise_for_status()
+        body = r.json()
     reply_content = body["choices"][0]["message"]["content"].strip()
     return {"reply": reply_content, "suggestions": [], "sources": rag_results}
 
@@ -385,9 +390,10 @@ KURALLAR:
         "max_tokens": 1000,
         "response_format": {"type": "json_object"},
     }
-    r = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
-    body = r.json()
+    async with httpx.AsyncClient() as client:
+        r = await client.post(MISTRAL_URL, headers=headers, json=payload, timeout=60.0)
+        r.raise_for_status()
+        body = r.json()
     content = body["choices"][0]["message"]["content"]
     cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.MULTILINE)
     return json.loads(cleaned)

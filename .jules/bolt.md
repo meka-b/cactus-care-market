@@ -1,0 +1,3 @@
+## 2024-05-19 - Replace Blocking Synchronous HTTP Requests with Async Non-blocking httpx
+**Learning:** Running `requests.post` inside an `async def` function running on the `asyncio` event loop blocks the entire loop, eliminating the benefits of concurrent asynchronous design in FastAPI. By migrating to `httpx.AsyncClient`, the process yields control during network I/O, allowing concurrent tasks to be processed efficiently.
+**Action:** When implementing HTTP calls in any async Python environment (FastAPI, aiohttp, etc), always ensure non-blocking networking libraries like `httpx` or `aiohttp` are used. Avoid using synchronous `requests` inside an `async def` route or service layer unless encapsulated inside `asyncio.to_thread()`.
