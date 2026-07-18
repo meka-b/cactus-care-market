@@ -1,8 +1,28 @@
 import pytest
-from backend.constants import compute_tags_from_taxonomy
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend')))
+from taxonomy_helpers import compute_tags_from_taxonomy
+
+MOCK_TAXONOMY = {
+    "product_categories": [
+        {"name": "Kaktüsler", "slug": "kaktusler", "type": None},
+        {"name": "Sukulentler", "slug": "sukulentler", "type": None}
+    ],
+    "filters": [
+        {"name": "Kolay Bakım", "slug": "kolay-bakim-bitkileri", "type": "care_level"},
+        {"name": "Tam Güneş", "slug": "tam-gunes-seven-bitkiler", "type": "light_need"},
+        {"name": "Yarı Gölge", "slug": "yari-golge-bitkileri", "type": "light_need"},
+        {"name": "Az", "slug": "az-sulanan-bitkiler", "type": "water_need"},
+        {"name": "Orta", "slug": "orta-sulanan-bitkiler", "type": "water_need"},
+        {"name": "Mini (0-20 cm)", "slug": "mini-bitkiler", "type": "size"},
+        {"name": "Pet Safe", "slug": "pet-friendly-bitkiler", "type": "pet_safe"}
+    ]
+}
 
 def test_compute_tags_all_match():
     tags = compute_tags_from_taxonomy(
+        taxonomy=MOCK_TAXONOMY,
         category="Kaktüsler",
         care="Kolay Bakım",
         light="Tam Güneş",
@@ -21,6 +41,7 @@ def test_compute_tags_all_match():
 
 def test_compute_tags_no_match():
     tags = compute_tags_from_taxonomy(
+        taxonomy=MOCK_TAXONOMY,
         category="Invalid",
         care="Invalid",
         light="Invalid",
@@ -32,6 +53,7 @@ def test_compute_tags_no_match():
 
 def test_compute_tags_partial_match():
     tags = compute_tags_from_taxonomy(
+        taxonomy=MOCK_TAXONOMY,
         category="Sukulentler",
         care="Invalid",
         light="Yarı Gölge",
@@ -47,6 +69,7 @@ def test_compute_tags_partial_match():
 
 def test_compute_tags_empty_strings():
     tags = compute_tags_from_taxonomy(
+        taxonomy=MOCK_TAXONOMY,
         category="",
         care="",
         light="",
