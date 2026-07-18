@@ -1,5 +1,6 @@
 import sys
 import os
+import bcrypt
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend')))
 
 from auth import hash_password, verify_password
@@ -10,6 +11,7 @@ def test_hash_password():
     assert hashed != password
     assert isinstance(hashed, str)
     assert hashed.startswith("$2b$") or hashed.startswith("$2a$") or hashed.startswith("$2y$")
+    assert bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8")) is True
 
 def test_verify_password():
     password = "mysecretpassword"
