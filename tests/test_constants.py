@@ -1,5 +1,5 @@
 import pytest
-from backend.constants import compute_tags_from_taxonomy
+from taxonomy_helpers import compute_tags_from_taxonomy
 
 def test_compute_tags_all_match():
     tags = compute_tags_from_taxonomy(
