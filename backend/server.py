@@ -2092,7 +2092,7 @@ app.include_router(knowledge_graph.router, prefix="/api")
 app.include_router(seo_engine.router)
 app.include_router(exa_router.router)
 
-cors_origins = os.environ.get("CORS_ORIGINS", "*").split(",")
+cors_origins = os.environ.get("CORS_ORIGINS", "").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_credentials="*" not in cors_origins,
