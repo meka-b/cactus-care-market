@@ -1,6 +1,7 @@
 """JWT auth utilities for Yeşil Dükkan."""
 
 import os
+import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import bcrypt
@@ -28,6 +29,7 @@ def create_token(user_id: str, role: str = "customer") -> str:
         "sub": user_id,
         "role": role,
         "exp": datetime.now(timezone.utc) + timedelta(days=JWT_EXPIRE_DAYS),
+        "jti": secrets.token_hex(16),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALG)
 
